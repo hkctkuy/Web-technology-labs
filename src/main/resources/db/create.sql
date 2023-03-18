@@ -1,8 +1,3 @@
-DROP DATABASE IF EXISTS schedule_db;
-CREATE DATABASE schedule_db;
-
-\connect schedule_db
-
 CREATE TABLE "Group" (
 	group_id serial PRIMARY KEY,
 	number int NOT NULL,
