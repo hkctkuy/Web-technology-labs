@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS "Group" CASCADE;
 CREATE TABLE "Group" (
 	group_id serial PRIMARY KEY,
 	number int NOT NULL,
@@ -5,6 +6,7 @@ CREATE TABLE "Group" (
 	study_year int NOT NULL
 );
 
+DROP TABLE IF EXISTS Student CASCADE;
 CREATE TABLE Student (
 	student_id serial PRIMARY KEY,
 	surname varchar(255) NOT NULL,
@@ -13,33 +15,38 @@ CREATE TABLE Student (
 	group_id int REFERENCES "Group" (group_id) ON DELETE RESTRICT
 );
 
+DROP TABLE IF EXISTS Lecturer CASCADE;
 CREATE TABLE Lecturer (
 	lecturer_id serial PRIMARY KEY,
 	surname varchar(255) NOT NULL,
-        name varchar(255) NOT NULL,
-        patronymic varchar(255)
+    name varchar(255) NOT NULL,
+    patronymic varchar(255)
 );
 
+DROP TABLE IF EXISTS Audience CASCADE;
 CREATE TABLE Audience (
 	audience_id serial PRIMARY KEY,
 	number varchar(5) NOT NULL UNIQUE,
-	capacity int DEFAULT 36
+	capacity int DEFAULT 36 NOT NULL
 );
 
+DROP TABLE IF EXISTS Coverage CASCADE;
 CREATE TABLE Coverage (
 	coverage_id serial PRIMARY KEY,
-	type varchar(10)
+	type varchar(10) NOT NULL UNIQUE
 );
 
+DROP TABLE IF EXISTS Course CASCADE;
 CREATE TABLE Course (
 	course_id serial PRIMARY KEY,
 	name varchar(255) NOT NULL UNIQUE,
-	description text DEFAULT '',
+	description text DEFAULT '' NOT NULL,
 	coverage_id int REFERENCES Coverage (coverage_id) ON DELETE RESTRICT,
-	depth int DEFAULT 1, -- Number of exercise per week
+	depth int DEFAULT 1 NOT NULL, -- Number of exercise per week
 	study_year int	
 );
 
+DROP TABLE IF EXISTS Exercise CASCADE;
 CREATE TABLE Exercise (
 	exercise_id serial PRIMARY KEY,
 	group_id int REFERENCES "Group" (group_id) ON DELETE RESTRICT,
@@ -47,28 +54,32 @@ CREATE TABLE Exercise (
 	lecturer_id int REFERENCES Lecturer (lecturer_id) ON DELETE RESTRICT
 );
 
+DROP TABLE IF EXISTS Course_dist CASCADE;
 CREATE TABLE Course_dist (
+    course_dist_id serial PRIMARY KEY,
 	group_id int REFERENCES "Group" (group_id) ON DELETE RESTRICT,
-	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT,
-	PRIMARY KEY (group_id, course_id)
+	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT
 );
 
+DROP TABLE IF EXISTS Spec_course_dist CASCADE;
 CREATE TABLE Spec_course_dist (
+    spec_course_dist_id serial PRIMARY KEY,
 	student_id int REFERENCES Student (student_id) ON DELETE RESTRICT,
-	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT,
-	PRIMARY KEY (student_id, course_id)
+	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT
 );
 
+DROP TABLE IF EXISTS Lecturer_dist CASCADE;
 CREATE TABLE Lecturer_dist (
+    lecturer_dist_id serial PRIMARY KEY,
 	lecturer_id int REFERENCES Lecturer (lecturer_id) ON DELETE RESTRICT,
-	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT,
-	PRIMARY KEY (lecturer_id, course_id)
+	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT
 );
 
+DROP TABLE IF EXISTS Audience_dist CASCADE;
 CREATE TABLE Audience_dist (
+    audience_dist_id serial PRIMARY KEY,
 	audience_id int REFERENCES Audience (audience_id) ON DELETE RESTRICT,
-	time int, -- Number of lesson
 	exercise_id int REFERENCES Exercise (exercise_id) ON DELETE RESTRICT,
-	PRIMARY KEY (audience_id, time)
+    time int -- Number of lesson
 );
 
