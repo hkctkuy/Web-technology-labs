@@ -32,7 +32,7 @@ public class Student implements TableEntity<Long>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "group_id")
-    private Long group_id;
+    private Group group_id;
 
     @Override
     public boolean equals(Object _other) {

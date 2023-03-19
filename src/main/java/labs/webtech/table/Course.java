@@ -29,7 +29,7 @@ public class Course implements TableEntity<Long>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "coverage_id")
-    private Long coverage_id;
+    private Coverage coverage_id;
 
     @Column(nullable = false, name = "depth")
     @NonNull

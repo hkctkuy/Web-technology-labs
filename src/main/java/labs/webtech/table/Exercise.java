@@ -20,15 +20,15 @@ public class Exercise implements TableEntity<Long>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "group_id")
-    private Long group_id;
+    private Group group_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "course_id")
-    private Long course_id;
+    private Course course_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "lecturer_id")
-    private Long lecturer_id;
+    private Lecturer lecturer_id;
 
     @Override
     public boolean equals(Object _other) {

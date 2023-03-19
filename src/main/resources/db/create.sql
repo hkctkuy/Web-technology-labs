@@ -58,21 +58,24 @@ DROP TABLE IF EXISTS Course_dist CASCADE;
 CREATE TABLE Course_dist (
     course_dist_id serial PRIMARY KEY,
 	group_id int REFERENCES "Group" (group_id) ON DELETE RESTRICT,
-	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT
+	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT,
+    UNIQUE (group_id, course_id)
 );
 
 DROP TABLE IF EXISTS Spec_course_dist CASCADE;
 CREATE TABLE Spec_course_dist (
     spec_course_dist_id serial PRIMARY KEY,
 	student_id int REFERENCES Student (student_id) ON DELETE RESTRICT,
-	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT
+	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT,
+    UNIQUE (student_id, course_id)
 );
 
 DROP TABLE IF EXISTS Lecturer_dist CASCADE;
 CREATE TABLE Lecturer_dist (
     lecturer_dist_id serial PRIMARY KEY,
 	lecturer_id int REFERENCES Lecturer (lecturer_id) ON DELETE RESTRICT,
-	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT
+	course_id int REFERENCES Course (course_id) ON DELETE RESTRICT,
+    UNIQUE (lecturer_id, course_id)
 );
 
 DROP TABLE IF EXISTS Audience_dist CASCADE;
@@ -80,6 +83,7 @@ CREATE TABLE Audience_dist (
     audience_dist_id serial PRIMARY KEY,
 	audience_id int REFERENCES Audience (audience_id) ON DELETE RESTRICT,
 	exercise_id int REFERENCES Exercise (exercise_id) ON DELETE RESTRICT,
-    time int -- Number of lesson
+    time int, -- Number of lesson
+    UNIQUE (audience_id, time)
 );
 

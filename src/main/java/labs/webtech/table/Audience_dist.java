@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Audience_dist",
-        uniqueConstraints={
+        uniqueConstraints = {
         @UniqueConstraint(columnNames = {"audience_id", "time"})
 })
 @Getter
@@ -24,11 +24,11 @@ public class Audience_dist implements TableEntity<Long>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "audience_id")
-    private Long audience_id;
+    private Audience audience;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "exercise_id")
-    private Long exercise_id;
+    private Exercise exercise;
 
     @Column(nullable = false, name = "time")
     @NonNull
@@ -41,8 +41,8 @@ public class Audience_dist implements TableEntity<Long>{
         if (_other == null || getClass() != _other.getClass()) return false;
         Audience_dist other = (Audience_dist) _other;
         return Objects.equals(id, other.id)
-                && Objects.equals(audience_id, other.audience_id)
-                && Objects.equals(exercise_id, other.exercise_id)
+                && Objects.equals(audience, other.audience)
+                && Objects.equals(exercise, other.exercise)
                 && Objects.equals(time, other.time);
     }
 }

@@ -5,7 +5,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Spec_course_dist")
+@Table(name = "Spec_course_dist",
+        uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"student_id", "course_id"})
+})
 @Getter
 @Setter
 @ToString
@@ -20,11 +23,11 @@ public class Spec_course_dist implements TableEntity<Long>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "student_id")
-    private Long student_id;
+    private Student student;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(nullable = false, name = "course_id")
-    private Long course_id;
+    private Course course;
 
     @Override
     public boolean equals(Object _other) {
@@ -32,7 +35,7 @@ public class Spec_course_dist implements TableEntity<Long>{
         if (_other == null || getClass() != _other.getClass()) return false;
         Spec_course_dist other = (Spec_course_dist) _other;
         return Objects.equals(id, other.id)
-                && Objects.equals(student_id, other.student_id)
-                && Objects.equals(course_id, other.course_id);
+                && Objects.equals(student, other.student)
+                && Objects.equals(course, other.course);
     }
 }
