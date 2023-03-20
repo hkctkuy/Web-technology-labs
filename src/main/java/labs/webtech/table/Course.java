@@ -28,8 +28,8 @@ public class Course implements TableEntity<Long>{
     private String description = "";
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "coverage_id")
-    private Coverage coverage_id;
+    @JoinColumn(nullable = false, name = "coverage_id")
+    private Coverage coverage;
 
     @Column(nullable = false, name = "depth")
     @NonNull
@@ -47,7 +47,7 @@ public class Course implements TableEntity<Long>{
         return Objects.equals(id, other.id)
                 && Objects.equals(name, other.name)
                 && Objects.equals(description, other.description)
-                && Objects.equals(coverage_id, other.coverage_id)
+                && Objects.equals(coverage, other.coverage)
                 && Objects.equals(depth, other.depth)
                 && Objects.equals(study_year, other.study_year);
     }

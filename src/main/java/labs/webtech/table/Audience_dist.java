@@ -23,11 +23,11 @@ public class Audience_dist implements TableEntity<Long>{
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "audience_id")
+    @JoinColumn(nullable = false, name = "audience_id")
     private Audience audience;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "exercise_id")
+    @JoinColumn(nullable = false, name = "exercise_id")
     private Exercise exercise;
 
     @Column(nullable = false, name = "time")

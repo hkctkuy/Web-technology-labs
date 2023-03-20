@@ -22,11 +22,11 @@ public class Course_dist implements TableEntity<Long>{
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "group_id")
+    @JoinColumn(nullable = false, name = "group_id")
     private Group group;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "course_id")
+    @JoinColumn(nullable = false, name = "course_id")
     private Course course;
 
     @Override

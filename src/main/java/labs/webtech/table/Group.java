@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Group")
+@Table(name = "\"Group\"")
 @Getter
 @Setter
 @ToString

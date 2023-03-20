@@ -31,8 +31,8 @@ public class Student implements TableEntity<Long>{
     private String patronymic;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "group_id")
-    private Group group_id;
+    @JoinColumn(nullable = false, name = "group_id")
+    private Group group;
 
     @Override
     public boolean equals(Object _other) {
@@ -43,6 +43,6 @@ public class Student implements TableEntity<Long>{
                 && Objects.equals(surname, other.surname)
                 && Objects.equals(name, other.name)
                 && Objects.equals(patronymic, other.patronymic)
-                && Objects.equals(group_id, other.group_id);
+                && Objects.equals(group, other.group);
     }
 }

@@ -19,16 +19,16 @@ public class Exercise implements TableEntity<Long>{
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "group_id")
-    private Group group_id;
+    @JoinColumn(nullable = false, name = "group_id")
+    private Group group;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "course_id")
-    private Course course_id;
+    @JoinColumn(nullable = false, name = "course_id")
+    private Course course;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(nullable = false, name = "lecturer_id")
-    private Lecturer lecturer_id;
+    @JoinColumn(nullable = false, name = "lecturer_id")
+    private Lecturer lecturer;
 
     @Override
     public boolean equals(Object _other) {
@@ -36,8 +36,8 @@ public class Exercise implements TableEntity<Long>{
         if (_other == null || getClass() != _other.getClass()) return false;
         Exercise other = (Exercise) _other;
         return Objects.equals(id, other.id)
-                && Objects.equals(group_id, other.group_id)
-                && Objects.equals(course_id, other.course_id)
-                && Objects.equals(lecturer_id, other.lecturer_id);
+                && Objects.equals(group, other.group)
+                && Objects.equals(course, other.course)
+                && Objects.equals(lecturer, other.lecturer);
     }
 }
