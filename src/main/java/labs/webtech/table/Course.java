@@ -14,6 +14,12 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Course implements TableEntity<Long>{
 
+    public enum Coverage {
+        STREAM,
+        GROUP,
+        SPEC
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "course_id")
@@ -25,10 +31,11 @@ public class Course implements TableEntity<Long>{
 
     @Column(nullable = false, name = "description")
     @NonNull
+    @Builder.Default
     private String description = "";
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "coverage_id")
+    @Column(nullable = false, name = "coverage")
+    @NonNull
     private Coverage coverage;
 
     @Column(nullable = false, name = "depth")

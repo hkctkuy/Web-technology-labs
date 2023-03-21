@@ -30,12 +30,7 @@ INSERT INTO "Audience" (number, capacity) VALUES
 	('666', DEFAULT),
 	('П1', 200);
 
-INSERT INTO "Coverage" (type) VALUES
-	('Поток'),
-	('Группа'),
-	('Спец. курс');
-
-INSERT INTO "Course" (name, coverage_id, depth, study_year) VALUES
+INSERT INTO "Course" (name, coverage, depth, study_year) VALUES
 	('Линейная алгебра', 1, 2, 1),
 	('Математический анализ I', 1, 2, 1),
 	('Математический анализ II', 1, 1, 2),

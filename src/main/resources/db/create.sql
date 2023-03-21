@@ -30,18 +30,12 @@ CREATE TABLE "Audience" (
 	capacity int DEFAULT 36 NOT NULL
 );
 
-DROP TABLE IF EXISTS "Coverage" CASCADE;
-CREATE TABLE "Coverage" (
-	coverage_id serial PRIMARY KEY,
-	type varchar(10) NOT NULL UNIQUE
-);
-
 DROP TABLE IF EXISTS "Course" CASCADE;
 CREATE TABLE "Course" (
 	course_id serial PRIMARY KEY,
 	name varchar(255) NOT NULL UNIQUE,
 	description text DEFAULT '' NOT NULL,
-	coverage_id int REFERENCES "Coverage" (coverage_id) ON DELETE RESTRICT,
+	coverage int NOT NULL,
 	depth int DEFAULT 1 NOT NULL, -- Number of exercise per week
 	study_year int
 );
