@@ -37,7 +37,7 @@ INSERT INTO "Course" (name, coverage, depth, study_year) VALUES
 	('Комплексный анализ', 1, 1, 2),
 	('Функциональный анализ', 1, 1, 3),
 	('Функциональное программирование', 2, 2, 4),
-	('Комиляторные технологии', 3, 1, NULL);
+	('Комиляторные технологии', 3, 1, 0);
 
 INSERT INTO "Lecturer_dist" (lecturer_id, course_id) VALUES
 	(1, 2),

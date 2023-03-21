@@ -1,12 +1,11 @@
 package labs.webtech.table;
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Audience")
+@Table(name = "\"Audience\"")
 @Getter
 @Setter
 @Builder
@@ -27,8 +26,7 @@ public class Audience implements TableEntity<Long>{
 
     @Column(nullable = false, name = "capacity")
     @NonNull
-    @Builder.Default
-    private Integer capacity = 36;
+    private Integer capacity;
 
     @Override
     public boolean equals(Object _other) {

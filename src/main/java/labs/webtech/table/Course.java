@@ -5,9 +5,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Course")
+@Table(name = "\"Course\"")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -25,12 +26,11 @@ public class Course implements TableEntity<Long>{
     @Column(nullable = false, name = "course_id")
     private Long id;
 
-    @Column(nullable = false, name = "name")
+    @Column(nullable = false, unique = true, name = "name")
     @NonNull
     private String name;
 
-    @Column(nullable = false, name = "description")
-    @NonNull
+    @Column(nullable = false, columnDefinition = "text default \"\"", name = "description")
     @Builder.Default
     private String description = "";
 
@@ -40,7 +40,7 @@ public class Course implements TableEntity<Long>{
 
     @Column(nullable = false, name = "depth")
     @NonNull
-    private Integer depth = 1;
+    private Integer depth;
 
     @Column(nullable = false, name = "study_year")
     @NonNull

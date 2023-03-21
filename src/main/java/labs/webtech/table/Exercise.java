@@ -5,11 +5,13 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Exercise")
+@Table(name = "\"Exercise\"")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Exercise implements TableEntity<Long>{
 
@@ -20,14 +22,17 @@ public class Exercise implements TableEntity<Long>{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "group_id")
+    @NonNull
     private Group group;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "course_id")
+    @NonNull
     private Course course;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "lecturer_id")
+    @NonNull
     private Lecturer lecturer;
 
     @Override

@@ -1,32 +1,35 @@
 package labs.webtech.table;
 
+import labs.webtech.CompositeId.Spec_course_distId;
+
 import lombok.*;
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Spec_course_dist",
+@Table(name = "\"Spec_course_dist\"",
         uniqueConstraints = {
         @UniqueConstraint(columnNames = {"student_id", "course_id"})
 })
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Spec_course_dist implements TableEntity<Long>{
+@IdClass(Spec_course_distId.class)
+public class Spec_course_dist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, name = "spec_course_dist_id")
-    private Long id;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "student_id")
+    @NonNull
     private Student student;
 
+    @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "course_id")
+    @NonNull
     private Course course;
 
     @Override
@@ -34,8 +37,7 @@ public class Spec_course_dist implements TableEntity<Long>{
         if (this == _other) return true;
         if (_other == null || getClass() != _other.getClass()) return false;
         Spec_course_dist other = (Spec_course_dist) _other;
-        return Objects.equals(id, other.id)
-                && Objects.equals(student, other.student)
+        return Objects.equals(student, other.student)
                 && Objects.equals(course, other.course);
     }
 }

@@ -5,9 +5,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Lecturer")
+@Table(name = "\"Lecturer\"")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class Lecturer implements TableEntity<Long>{
     private String name;
 
     @Column(nullable = false, name = "patronymic")
+    @NonNull
     private String patronymic;
 
     @Override

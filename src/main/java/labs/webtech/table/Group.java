@@ -8,6 +8,7 @@ import java.util.Objects;
 @Table(name = "\"Group\"")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor

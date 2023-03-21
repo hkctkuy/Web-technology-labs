@@ -4,7 +4,6 @@ import labs.webtech.DAO.AudienceDAO;
 import labs.webtech.table.Audience;
 import labs.webtech.table.Audience_dist;
 
-import labs.webtech.table.Audience;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;

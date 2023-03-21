@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -66,24 +65,24 @@ public class StudentDAOTest {
     @BeforeEach
     void beforeEach() {
         // 1 stream, 1 year
-        Group group = new Group(1L, 101, 1, 1);
+        Group group = new Group(101, 1, 1);
         groupDAO.save(group);
         List<Student> studentList = new ArrayList<>();
-        studentList.add(new Student(1L, "Первов", "Петр", "Петрович", group));
-        studentList.add(new Student(2L, "Второв", "Василий", "Васильевич", group));
-        studentList.add(new Student(3L, "Трифонов", "Трифон", "Трифонович", group));
+        studentList.add(new Student("Первов", "Петр", "Петрович", group));
+        studentList.add(new Student("Второв", "Василий", "Васильевич", group));
+        studentList.add(new Student("Трифонов", "Трифон", "Трифонович", group));
         studentDAO.saveCollection(studentList);
         // 2 stream, 1 year
-        group = new Group(2L, 102, 2, 1);
+        group = new Group(102, 2, 1);
         groupDAO.save(group);
         studentList = new ArrayList<>();
-        studentList.add(new Student(4L, "Четвертак", "Чибис", "Чибисович", group));
+        studentList.add(new Student("Четвертак", "Чибис", "Чибисович", group));
         studentDAO.saveCollection(studentList);
         // 1 stream, 2 year
-        group = new Group(3L, 201, 1, 2);
+        group = new Group(201, 1, 2);
         groupDAO.save(group);
         studentList = new ArrayList<>();
-        studentList.add(new Student(5L, "Аааев", "Ааай", "Аааевич", group));
+        studentList.add(new Student("Аааев", "Ааай", "Аааевич", group));
         studentDAO.saveCollection(studentList);
     }
 

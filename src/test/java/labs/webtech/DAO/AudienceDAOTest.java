@@ -34,14 +34,14 @@ public class AudienceDAOTest {
     void beforeEach() {
         // 1 stream, 1 year;
         List<Audience> audienceList = new ArrayList<>();
-        audienceList.add(new Audience(1L, "526", 36));
-        audienceList.add(new Audience(2L, "526-б", 36));
-        audienceList.add(new Audience(3L, "П1", 200));
+        audienceList.add(new Audience("526", 36));
+        audienceList.add(new Audience("526-б", 36));
+        audienceList.add(new Audience("П1", 200));
         audienceDAO.saveCollection(audienceList);
     }
 
     @BeforeAll
-    @AfterEach
+    //@AfterEach
     void annihilation() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();

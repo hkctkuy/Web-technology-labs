@@ -5,9 +5,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Student")
+@Table(name = "\"Student\"")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -28,10 +29,12 @@ public class Student implements TableEntity<Long>{
     private String name;
 
     @Column(nullable = false, name = "patronymic")
+    @NonNull
     private String patronymic;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "group_id")
+    @NonNull
     private Group group;
 
     @Override

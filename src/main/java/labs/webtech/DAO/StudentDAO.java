@@ -2,12 +2,6 @@ package labs.webtech.DAO;
 
 import labs.webtech.table.Student;
 import labs.webtech.table.Group;
-
-import labs.webtech.DAO.GroupDAO;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.hibernate.Session;
 import java.util.List;
 
 public interface StudentDAO extends TableDAO<Student, Long> {

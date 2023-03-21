@@ -10,13 +10,12 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class StudentDAOImpl extends TableDAOImpl<Student, Long> implements StudentDAO {
 
-    public StudentDAOImpl(){
+    public StudentDAOImpl() {
         super(Student.class);
     }
 
