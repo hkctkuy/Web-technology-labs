@@ -86,6 +86,17 @@ public class StudentDAOTest {
         assertEquals(studentList.size(), 1);
     }
 
+    @Test
+    void testGroupSize() {
+        Group group = groupDAO.getById(1L);
+        assertNotNull(group);
+        assertEquals(groupDAO.groupSize(group), 3);
+        // Empty group
+        group = new Group(111, 1, 1);
+        groupDAO.save(group);
+        assertEquals(groupDAO.groupSize(group), 0);
+    }
+
     @BeforeEach
     void beforeEach() {
         // Courses

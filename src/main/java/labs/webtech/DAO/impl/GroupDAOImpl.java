@@ -4,6 +4,7 @@ import labs.webtech.DAO.GroupDAO;
 import labs.webtech.table.Course;
 import labs.webtech.table.Course_dist;
 import labs.webtech.table.Group;
+import labs.webtech.table.Student;
 
 import lombok.SneakyThrows;
 import org.hibernate.Session;
@@ -89,4 +90,16 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
             session.getTransaction().commit();
         }
     }
+
+    @Override
+    public int groupSize(Group group) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Student> query = session
+                    .createQuery("SELECT s FROM Student s WHERE s.group = :group", Student.class)
+                    .setParameter("group", group);
+            List<Student> studentList = query.getResultList();
+            return studentList == null ? 0 : studentList.size();
+        }
+    }
+
 }

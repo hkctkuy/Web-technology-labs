@@ -17,4 +17,6 @@ public interface GroupDAO extends TableDAO<Group, Long> {
 
     void attachGroupCourse(Group group, Course course);
 
+    int groupSize(Group group);
+
 }
