@@ -2,14 +2,15 @@ package labs.webtech.DAO.impl;
 
 import labs.webtech.DAO.GroupDAO;
 import labs.webtech.DAO.StudentDAO;
-import labs.webtech.table.Group;
-import labs.webtech.table.Student;
+import labs.webtech.table.*;
 
+import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -61,5 +62,43 @@ public class StudentDAOImpl extends TableDAOImpl<Student, Long> implements Stude
     @Override
     public List<Student> getByStreamAndYear(Integer stream, Integer study_year) {
         return getByGroupList(groupDAO.getByStreamAndYear(stream, study_year));
+    }
+
+    @Override
+    public List<Student> getByCourse(Course course) {
+        if (course.getCoverage() != Course.Coverage.SPEC) {
+            return getByGroupList(groupDAO.getByCourse(course));
+        }
+        try (Session session = sessionFactory.openSession()) {
+            Query<Spec_course_dist> query = session
+                    .createQuery("SELECT scd FROM Spec_course_dist scd WHERE scd.course = :course", Spec_course_dist.class)
+                    .setParameter("course", course);
+            List<Spec_course_dist> spec_course_distList = query.getResultList();
+            if (spec_course_distList.size() == 0) {
+                return null;
+            }
+            List<Student> studentList = new ArrayList<>();
+            for (Spec_course_dist spec_course_dist: spec_course_distList) {
+                studentList.add(spec_course_dist.getStudent());
+            }
+            return studentList;
+        }
+    }
+
+    @SneakyThrows
+    @Override
+    public void attachStudentSpecCourse(Student student, Course course) {
+        if (course.getCoverage() != Course.Coverage.SPEC) {
+            throw new Exception("A single student can only be enrolled in a special course.");
+        }
+        if (course.getStudy_year() > student.getGroup().getStudy_year()) {
+            throw new Exception("Pretty young student for that course");
+        }
+        Spec_course_dist spec_Spec_course_dist = new Spec_course_dist(student, course);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.saveOrUpdate(spec_Spec_course_dist);
+            session.getTransaction().commit();
+        }
     }
 }
