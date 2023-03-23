@@ -2,7 +2,7 @@ package labs.webtech.DAO.impl;
 
 import labs.webtech.DAO.GroupDAO;
 import labs.webtech.table.Course;
-import labs.webtech.table.Course_dist;
+import labs.webtech.table.CourseDist;
 import labs.webtech.table.Group;
 import labs.webtech.table.Student;
 
@@ -32,22 +32,22 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
     }
 
     @Override
-    public List<Group> getByYear(Integer study_year) {
+    public List<Group> getByYear(Integer year) {
         try (Session session = sessionFactory.openSession()) {
             Query<Group> query = session
-                    .createQuery("SELECT g FROM Group g WHERE g.study_year = :study_year", Group.class)
-                    .setParameter("study_year", study_year);
+                    .createQuery("SELECT g FROM Group g WHERE g.year = :year", Group.class)
+                    .setParameter("year", year);
             return query.getResultList().size() == 0 ? null : query.getResultList();
         }
     }
 
     @Override
-    public List<Group> getByStreamAndYear(Integer stream, Integer study_year) {
+    public List<Group> getByStreamAndYear(Integer stream, Integer year) {
         try (Session session = sessionFactory.openSession()) {
             Query<Group> query = session
-                    .createQuery("SELECT g FROM Group g WHERE g.stream = :stream and g.study_year = :study_year", Group.class)
+                    .createQuery("SELECT g FROM Group g WHERE g.stream = :stream and g.year = :year", Group.class)
                     .setParameter("stream", stream)
-                    .setParameter("study_year", study_year);
+                    .setParameter("year", year);
             return query.getResultList().size() == 0 ? null : query.getResultList();
         }
     }
@@ -58,16 +58,16 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
             return null;
         }
         try (Session session = sessionFactory.openSession()) {
-            Query<Course_dist> query = session
-                    .createQuery("SELECT cd FROM Course_dist cd WHERE cd.course = :course", Course_dist.class)
+            Query<CourseDist> query = session
+                    .createQuery("SELECT cd FROM CourseDist cd WHERE cd.course = :course", CourseDist.class)
                     .setParameter("course", course);
-            List<Course_dist> course_distList = query.getResultList();
-            if (course_distList.size() == 0) {
+            List<CourseDist> courseDistList = query.getResultList();
+            if (courseDistList.size() == 0) {
                 return null;
             }
             List<Group> groupList = new ArrayList<>();
-            for (Course_dist course_dist: course_distList) {
-                groupList.add(course_dist.getGroup());
+            for (CourseDist courseDist: courseDistList) {
+                groupList.add(courseDist.getGroup());
             }
             return groupList;
         }
@@ -80,13 +80,13 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
         if (course.getCoverage() == Course.Coverage.SPEC) {
             throw new Exception("It is not possible to register an entire group for a special course");
         }
-        if (course.getStudy_year() > group.getStudy_year()) {
+        if (course.getYear() > group.getYear()) {
             throw new Exception("Pretty young group for that course");
         }
-                Course_dist course_dist = new Course_dist(group, course);
+                CourseDist courseDist = new CourseDist(group, course);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.saveOrUpdate(course_dist);
+            session.saveOrUpdate(courseDist);
             session.getTransaction().commit();
         }
     }

@@ -1,15 +1,15 @@
 package labs.webtech.table;
 
-import labs.webtech.CompositeId.Course_distId;
+import labs.webtech.CompositeId.SpecCourseDistId;
 
 import lombok.*;
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "\"Course_dist\"",
+@Table(name = "\"SpecCourseDist\"",
         uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"group_id", "course_id"})
+        @UniqueConstraint(columnNames = {"student_id", "course_id"})
 })
 @Getter
 @Setter
@@ -17,14 +17,14 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(Course_distId.class)
-public class Course_dist {
+@IdClass(SpecCourseDistId.class)
+public class SpecCourseDist {
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "group_id")
+    @JoinColumn(nullable = false, name = "student_id")
     @NonNull
-    private Group group;
+    private Student student;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
@@ -36,8 +36,8 @@ public class Course_dist {
     public boolean equals(Object _other) {
         if (this == _other) return true;
         if (_other == null || getClass() != _other.getClass()) return false;
-        Course_dist other = (Course_dist) _other;
-        return Objects.equals(group, other.group)
+        SpecCourseDist other = (SpecCourseDist) _other;
+        return Objects.equals(student, other.student)
                 && Objects.equals(course, other.course);
     }
 }

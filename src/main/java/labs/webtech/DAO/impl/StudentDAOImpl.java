@@ -55,13 +55,13 @@ public class StudentDAOImpl extends TableDAOImpl<Student, Long> implements Stude
     }
 
     @Override
-    public List<Student> getByYear(Integer study_year) {
-        return getByGroupList(groupDAO.getByYear(study_year));
+    public List<Student> getByYear(Integer year) {
+        return getByGroupList(groupDAO.getByYear(year));
     }
 
     @Override
-    public List<Student> getByStreamAndYear(Integer stream, Integer study_year) {
-        return getByGroupList(groupDAO.getByStreamAndYear(stream, study_year));
+    public List<Student> getByStreamAndYear(Integer stream, Integer year) {
+        return getByGroupList(groupDAO.getByStreamAndYear(stream, year));
     }
 
     @Override
@@ -70,16 +70,16 @@ public class StudentDAOImpl extends TableDAOImpl<Student, Long> implements Stude
             return getByGroupList(groupDAO.getByCourse(course));
         }
         try (Session session = sessionFactory.openSession()) {
-            Query<Spec_course_dist> query = session
-                    .createQuery("SELECT scd FROM Spec_course_dist scd WHERE scd.course = :course", Spec_course_dist.class)
+            Query<SpecCourseDist> query = session
+                    .createQuery("SELECT scd FROM SpecCourseDist scd WHERE scd.course = :course", SpecCourseDist.class)
                     .setParameter("course", course);
-            List<Spec_course_dist> spec_course_distList = query.getResultList();
-            if (spec_course_distList.size() == 0) {
+            List<SpecCourseDist> specCourseDistList = query.getResultList();
+            if (specCourseDistList.size() == 0) {
                 return null;
             }
             List<Student> studentList = new ArrayList<>();
-            for (Spec_course_dist spec_course_dist: spec_course_distList) {
-                studentList.add(spec_course_dist.getStudent());
+            for (SpecCourseDist specCourseDist: specCourseDistList) {
+                studentList.add(specCourseDist.getStudent());
             }
             return studentList;
         }
@@ -91,13 +91,13 @@ public class StudentDAOImpl extends TableDAOImpl<Student, Long> implements Stude
         if (course.getCoverage() != Course.Coverage.SPEC) {
             throw new Exception("A single student can only be enrolled in a special course.");
         }
-        if (course.getStudy_year() > student.getGroup().getStudy_year()) {
+        if (course.getYear() > student.getGroup().getYear()) {
             throw new Exception("Pretty young student for that course");
         }
-        Spec_course_dist spec_Spec_course_dist = new Spec_course_dist(student, course);
+        SpecCourseDist spec_SpecCourseDist = new SpecCourseDist(student, course);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.saveOrUpdate(spec_Spec_course_dist);
+            session.saveOrUpdate(spec_SpecCourseDist);
             session.getTransaction().commit();
         }
     }

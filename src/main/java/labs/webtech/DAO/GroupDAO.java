@@ -9,9 +9,9 @@ public interface GroupDAO extends TableDAO<Group, Long> {
 
     List<Group> getByStream(Integer stream);
 
-    List<Group> getByYear(Integer study_year);
+    List<Group> getByYear(Integer year);
 
-    List<Group> getByStreamAndYear(Integer stream, Integer study_year);
+    List<Group> getByStreamAndYear(Integer stream, Integer year);
 
     List<Group> getByCourse(Course course);
 

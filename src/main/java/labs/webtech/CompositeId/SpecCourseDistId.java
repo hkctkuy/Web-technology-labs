@@ -6,15 +6,15 @@ import labs.webtech.table.Student;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Spec_course_distId implements Serializable {
+public class SpecCourseDistId implements Serializable {
 
     private Course course;
 
     private Student student;
 
-    public Spec_course_distId() {}
+    public SpecCourseDistId() {}
 
-    public Spec_course_distId(Course _course, Student _student) {
+    public SpecCourseDistId(Course _course, Student _student) {
         course = _course;
         student = _student;
     }
@@ -23,7 +23,7 @@ public class Spec_course_distId implements Serializable {
     public boolean equals(Object _other) {
         if (this == _other) return true;
         if (_other == null || getClass() != _other.getClass()) return false;
-        Spec_course_distId other = (Spec_course_distId) _other;
+        SpecCourseDistId other = (SpecCourseDistId) _other;
         return Objects.equals(course, other.course)
                 && Objects.equals(student, other.student);
     }

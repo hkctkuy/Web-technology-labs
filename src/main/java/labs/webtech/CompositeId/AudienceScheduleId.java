@@ -5,24 +5,24 @@ import labs.webtech.table.Audience;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Audience_distId implements Serializable {
+public class AudienceScheduleId implements Serializable {
 
     private Audience audience;
 
     private Integer time;
 
-    public Audience_distId() {}
+    public AudienceScheduleId() {}
 
-    public Audience_distId(Audience _audience, Integer _time) {
-        audience = _audience;
-        time = _time;
+    public AudienceScheduleId(Audience audience, Integer time) {
+        this.audience = audience;
+        this.time = time;
     }
 
     @Override
     public boolean equals(Object _other) {
         if (this == _other) return true;
         if (_other == null || getClass() != _other.getClass()) return false;
-        Audience_distId other = (Audience_distId) _other;
+        AudienceScheduleId other = (AudienceScheduleId) _other;
         return Objects.equals(audience, other.audience)
                 && Objects.equals(time, other.time);
     }

@@ -42,9 +42,9 @@ public class Course implements TableEntity<Long>{
     @NonNull
     private Integer depth;
 
-    @Column(nullable = false, name = "study_year")
+    @Column(nullable = false, name = "year")
     @NonNull
-    private Integer study_year;
+    private Integer year;
 
     @Override
     public boolean equals(Object _other) {
@@ -56,6 +56,6 @@ public class Course implements TableEntity<Long>{
                 && Objects.equals(description, other.description)
                 && Objects.equals(coverage, other.coverage)
                 && Objects.equals(depth, other.depth)
-                && Objects.equals(study_year, other.study_year);
+                && Objects.equals(year, other.year);
     }
 }

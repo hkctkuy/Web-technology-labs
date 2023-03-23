@@ -1,15 +1,16 @@
 package labs.webtech.table;
 
-import labs.webtech.CompositeId.Audience_distId;
+import labs.webtech.CompositeId.LecturerScheduleId;
 
 import lombok.*;
 import javax.persistence.*;
 import java.util.Objects;
 
+
 @Entity
-@Table(name = "\"Audience_dist\"",
+@Table(name = "\"LecturerSchedule\"",
         uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"audience_id", "time"})
+        @UniqueConstraint(columnNames = {"lecturer_id", "time"})
 })
 @Getter
 @Setter
@@ -17,14 +18,14 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(Audience_distId.class)
-public class Audience_dist {
+@IdClass(LecturerScheduleId.class)
+public class LecturerSchedule {
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "audience_id")
+    @JoinColumn(nullable = false, name = "lecturer_id")
     @NonNull
-    private Audience audience;
+    private Lecturer lecturer;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "exercise_id")
@@ -36,13 +37,12 @@ public class Audience_dist {
     @NonNull
     private Integer time;
 
-
     @Override
     public boolean equals(Object _other) {
         if (this == _other) return true;
         if (_other == null || getClass() != _other.getClass()) return false;
-        Audience_dist other = (Audience_dist) _other;
-        return Objects.equals(audience, other.audience)
+        LecturerSchedule other = (LecturerSchedule) _other;
+        return Objects.equals(lecturer, other.lecturer)
                 && Objects.equals(exercise, other.exercise)
                 && Objects.equals(time, other.time);
     }

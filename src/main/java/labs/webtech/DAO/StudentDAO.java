@@ -14,9 +14,9 @@ public interface StudentDAO extends TableDAO<Student, Long> {
 
     List<Student> getByStream(Integer stream);
 
-    List<Student> getByYear(Integer study_year);
+    List<Student> getByYear(Integer year);
 
-    List<Student> getByStreamAndYear(Integer stream, Integer study_year);
+    List<Student> getByStreamAndYear(Integer stream, Integer year);
 
     List<Student> getByCourse(Course course);
 

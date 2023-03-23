@@ -21,10 +21,10 @@ public class LecturerDAOImpl extends TableDAOImpl<Lecturer, Long> implements Lec
 
     @Override
     public void attachLecturerCourse(Lecturer lecturer, Course course) {
-        Lecturer_dist lecturer_dist = new Lecturer_dist(lecturer, course);
+        LecturerDist lecturerDist = new LecturerDist(lecturer, course);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.saveOrUpdate(lecturer_dist);
+            session.saveOrUpdate(lecturerDist);
             session.getTransaction().commit();
         }
     }
@@ -32,16 +32,16 @@ public class LecturerDAOImpl extends TableDAOImpl<Lecturer, Long> implements Lec
     @Override
     public List<Course> getCourseList(Lecturer lecturer) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Lecturer_dist> query = session
-                    .createQuery("SELECT ld FROM Lecturer_dist ld WHERE ld.lecturer = :lecturer", Lecturer_dist.class)
+            Query<LecturerDist> query = session
+                    .createQuery("SELECT ld FROM LecturerDist ld WHERE ld.lecturer = :lecturer", LecturerDist.class)
                     .setParameter("lecturer", lecturer);
-            List<Lecturer_dist> course_distList = query.getResultList();
-            if (course_distList.size() == 0) {
+            List<LecturerDist> courseDistList = query.getResultList();
+            if (courseDistList.size() == 0) {
                 return null;
             }
             List<Course> courseList = new ArrayList<>();
-            for (Lecturer_dist lecturer_dist: course_distList) {
-                courseList.add(lecturer_dist.getCourse());
+            for (LecturerDist lecturerDist: courseDistList) {
+                courseList.add(lecturerDist.getCourse());
             }
             return courseList;
         }

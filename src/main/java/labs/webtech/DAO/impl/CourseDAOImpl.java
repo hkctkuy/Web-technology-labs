@@ -22,16 +22,16 @@ public class CourseDAOImpl extends TableDAOImpl<Course, Long> implements CourseD
     @Override
     public List<Lecturer> getLecturerList(Course course) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Lecturer_dist> query = session
-                    .createQuery("SELECT ld FROM Lecturer_dist ld WHERE ld.course = :course", Lecturer_dist.class)
+            Query<LecturerDist> query = session
+                    .createQuery("SELECT ld FROM LecturerDist ld WHERE ld.course = :course", LecturerDist.class)
                     .setParameter("course", course);
-            List<Lecturer_dist> lecturer_distList = query.getResultList();
-            if (lecturer_distList.size() == 0) {
+            List<LecturerDist> lecturerDistList = query.getResultList();
+            if (lecturerDistList.size() == 0) {
                 return null;
             }
             List<Lecturer> lecturerList = new ArrayList<>();
-            for (Lecturer_dist lecturer_dist: lecturer_distList) {
-                lecturerList.add(lecturer_dist.getLecturer());
+            for (LecturerDist lecturerDist: lecturerDistList) {
+                lecturerList.add(lecturerDist.getLecturer());
             }
             return lecturerList;
         }

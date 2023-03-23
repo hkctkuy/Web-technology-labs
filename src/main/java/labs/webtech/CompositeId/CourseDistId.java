@@ -1,35 +1,35 @@
 package labs.webtech.CompositeId;
 
 import labs.webtech.table.Course;
-import labs.webtech.table.Lecturer;
+import labs.webtech.table.Group;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Lecturer_distId implements Serializable {
-
+public class CourseDistId implements Serializable {
+    
     private Course course;
+    
+    private Group group;
 
-    private Lecturer lecturer;
+    public CourseDistId() {}
 
-    public Lecturer_distId() {}
-
-    public Lecturer_distId(Course _course, Lecturer _lecturer) {
+    public CourseDistId(Course _course, Group _group) {
         course = _course;
-        lecturer = _lecturer;
+        group = _group;
     }
 
     @Override
     public boolean equals(Object _other) {
         if (this == _other) return true;
         if (_other == null || getClass() != _other.getClass()) return false;
-        Lecturer_distId other = (Lecturer_distId) _other;
+        CourseDistId other = (CourseDistId) _other;
         return Objects.equals(course, other.course)
-                && Objects.equals(lecturer, other.lecturer);
+                && Objects.equals(group, other.group);
     }
 
     @Override
     public int hashCode() {
-        return course.getId().hashCode() * 1000 + lecturer.getId().hashCode();
+        return course.getId().hashCode() * 1000 + group.getId().hashCode();
     }
 }

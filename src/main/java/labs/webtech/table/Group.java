@@ -28,9 +28,9 @@ public class Group implements TableEntity<Long>{
     @NonNull
     private Integer stream;
 
-    @Column(nullable = false, name = "study_year")
+    @Column(nullable = false, name = "year")
     @NonNull
-    private Integer study_year;
+    private Integer year;
 
     @Override
     public boolean equals(Object _other) {
@@ -40,6 +40,6 @@ public class Group implements TableEntity<Long>{
         return Objects.equals(id, other.id)
                 && Objects.equals(number, other.number)
                 && Objects.equals(stream, other.stream)
-                && Objects.equals(study_year, other.study_year);
+                && Objects.equals(year, other.year);
     }
 }
