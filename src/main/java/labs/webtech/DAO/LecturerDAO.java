@@ -10,4 +10,6 @@ public interface LecturerDAO extends TableDAO<Lecturer, Long> {
     void attachLecturerCourse(Lecturer lecturer, Course course);
 
     List<Course> getCourseList(Lecturer lecturer);
+
+    List<Integer> getFreeTime(Lecturer lecturer);
 }

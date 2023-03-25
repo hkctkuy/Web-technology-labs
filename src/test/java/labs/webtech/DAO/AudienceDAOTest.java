@@ -77,6 +77,8 @@ public class AudienceDAOTest {
             session.createSQLQuery("TRUNCATE \"Course\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"Exercise\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Audience_audience_id_seq\" RESTART WITH 1;").executeUpdate();
+            session.createSQLQuery("ALTER SEQUENCE \"Course_course_id_seq\" RESTART WITH 1;").executeUpdate();
+            session.createSQLQuery("ALTER SEQUENCE \"Exercise_exercise_id_seq\" RESTART WITH 1;").executeUpdate();
             session.getTransaction().commit();
         }
     }

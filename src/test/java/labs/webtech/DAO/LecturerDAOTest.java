@@ -1,7 +1,6 @@
 package labs.webtech.DAO;
 
-import labs.webtech.table.Course;
-import labs.webtech.table.Lecturer;
+import labs.webtech.table.*;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,6 +55,18 @@ public class LecturerDAOTest {
         assertEquals(lecturerList.size(), 1);
     }
 
+    @Test
+    void testGetFreeTime() {
+        Lecturer lecturer = lecturerDAO.getById(1L);
+        assertNotNull(lecturer);
+        List<Integer> freeTime = lecturerDAO.getFreeTime(lecturer);
+        assertEquals(freeTime.size(), 29);
+        lecturer = lecturerDAO.getById(2L);
+        assertNotNull(lecturer);
+        freeTime = lecturerDAO.getFreeTime(lecturer);
+        assertEquals(freeTime.size(), 30);
+    }
+
     @BeforeEach
     void beforeEach() {
         Course linal = new Course("Линейная алгебра", Course.Coverage.STREAM, 2, 1);
@@ -69,6 +80,17 @@ public class LecturerDAOTest {
         lecturerDAO.attachLecturerCourse(linaler, linal);
         lecturerDAO.attachLecturerCourse(mataner, matan);
         lecturerDAO.attachLecturerCourse(mataner, linal);
+        // Create some exercise
+        try (Session session = sessionFactory.openSession()) {
+            Course course = new Course("", Course.Coverage.STREAM, 1, 1);
+            Exercise exercise = new Exercise(course);
+            LecturerSchedule lecturerSchedule = new LecturerSchedule(linaler, exercise, 0);
+            session.beginTransaction();
+            session.saveOrUpdate(course);
+            session.saveOrUpdate(exercise);
+            session.saveOrUpdate(lecturerSchedule);
+            session.getTransaction().commit();
+        }
     }
 
     @BeforeAll
@@ -77,8 +99,11 @@ public class LecturerDAOTest {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE \"Course\" RESTART IDENTITY CASCADE;").executeUpdate();
+            session.createSQLQuery("TRUNCATE \"Exercise\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"Lecturer\" RESTART IDENTITY CASCADE;").executeUpdate();
+            session.createSQLQuery("TRUNCATE \"LecturerSchedule\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Course_course_id_seq\" RESTART WITH 1;").executeUpdate();
+            session.createSQLQuery("ALTER SEQUENCE \"Exercise_exercise_id_seq\" RESTART WITH 1;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Lecturer_lecturer_id_seq\" RESTART WITH 1;").executeUpdate();
             session.getTransaction().commit();
         }

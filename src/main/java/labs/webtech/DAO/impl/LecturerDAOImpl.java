@@ -1,14 +1,17 @@
 package labs.webtech.DAO.impl;
 
+import labs.webtech.DAO.CourseDAO;
 import labs.webtech.DAO.LecturerDAO;
 import labs.webtech.table.*;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Repository
 public class LecturerDAOImpl extends TableDAOImpl<Lecturer, Long> implements LecturerDAO {
@@ -44,6 +47,19 @@ public class LecturerDAOImpl extends TableDAOImpl<Lecturer, Long> implements Lec
                 courseList.add(lecturerDist.getCourse());
             }
             return courseList;
+        }
+    }
+
+    @Override
+    public List<Integer> getFreeTime(Lecturer lecturer) {
+        List<Integer> freeTime = new ArrayList<>(IntStream.range(0, 30).boxed().toList());
+        try (Session session = sessionFactory.openSession()) {
+            Query<Integer> query = session
+                    .createQuery("SELECT ls.time FROM LecturerSchedule ls WHERE ls.lecturer = :lecturer", Integer.class)
+                    .setParameter("lecturer", lecturer);
+            List<Integer> notFreeTime = query.getResultList();
+            freeTime.removeAll(notFreeTime);
+            return freeTime;
         }
     }
 }
