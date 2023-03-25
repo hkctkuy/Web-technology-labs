@@ -19,23 +19,29 @@ public class AudienceDAOImpl extends TableDAOImpl<Audience, Long> implements Aud
     }
 
     @Override
-    public List<Audience> getByTime(Integer time) {
+    public List<Audience> getFree(Integer time, Integer capacity) {
         try (Session session = sessionFactory.openSession()) {
-            // Get list of non-free audiences
-            Query<AudienceSchedule> query = session
-                    .createQuery("SELECT ad FROM AudienceSchedule ad WHERE ad.time = :time", AudienceSchedule.class)
-                    .setParameter("time", time);
-            List<AudienceSchedule> audienceScheduleList = query.getResultList().size() == 0 ? null : query.getResultList();
-            List<Audience> audienceList = new ArrayList<>(getAll());
-            if (audienceScheduleList == null) {
-                return audienceList;
+            // Get audiences with the specified capacity
+            Query<Audience> query = session
+                    .createQuery("SELECT a FROM Audience a WHERE a.capacity >= :capacity", Audience.class)
+                    .setParameter("capacity", capacity);
+            List<Audience> audienceList = query.getResultList();
+            if (query.getResultList().size() == 0) {
+                return null;
             }
-            List<Audience> nonFreeAudienceList = new ArrayList<>();
-            for (AudienceSchedule audienceSchedule: audienceScheduleList) {
-                nonFreeAudienceList.add(audienceSchedule.getAudience());
+            // Remove all audiences not free at the specified time
+            List<Audience> notFreeAudienceList = new ArrayList<>();
+            for (Audience audience: audienceList) {
+                Query<AudienceSchedule> q = session
+                        .createQuery("SELECT asch FROM AudienceSchedule asch WHERE asch.time = :time AND asch.audience = :audience", AudienceSchedule.class)
+                        .setParameter("audience", audience)
+                        .setParameter("time", time);
+                if (q.getResultList().size() != 0) {
+                    notFreeAudienceList.add(audience);
+                }
             }
-            audienceList.removeAll(nonFreeAudienceList);
+            audienceList.removeAll(notFreeAudienceList);
             return audienceList;
-         }
+        }
     }
 }

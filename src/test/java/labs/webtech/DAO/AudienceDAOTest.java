@@ -1,6 +1,6 @@
 package labs.webtech.DAO;
 
-import labs.webtech.table.Audience;
+import labs.webtech.table.*;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -27,25 +27,55 @@ public class AudienceDAOTest {
     @Test
     void testSize() {
         List<Audience> audienceList = new ArrayList<>(audienceDAO.getAll());
+        assertEquals(audienceList.size(), 4);
+    }
+
+    @Test
+    void testGetFree() {
+        List<Audience> audienceList = audienceDAO.getFree(0, 30);
+        assertNotNull(audienceList);
         assertEquals(audienceList.size(), 3);
+        audienceList = audienceDAO.getFree(0, 200);
+        assertNotNull(audienceList);
+        assertEquals(audienceList.size(), 1);
+        audienceList = audienceDAO.getFree(1, 30);
+        assertNotNull(audienceList);
+        assertEquals(audienceList.size(), 4);
+        audienceList = audienceDAO.getFree(0, 1000);
+        assertNull(audienceList);
     }
 
     @BeforeEach
     void beforeEach() {
-        // 1 stream, 1 year;
+        Audience audience = new Audience("111", 36);
+        audienceDAO.save(audience);
         List<Audience> audienceList = new ArrayList<>();
         audienceList.add(new Audience("526", 36));
         audienceList.add(new Audience("526-б", 36));
         audienceList.add(new Audience("П1", 200));
         audienceDAO.saveCollection(audienceList);
+        // Create some exercise
+        try (Session session = sessionFactory.openSession()) {
+            Course course = new Course("", Course.Coverage.STREAM, 1, 1);
+            Exercise exercise = new Exercise(course);
+            AudienceSchedule audienceSchedule = new AudienceSchedule(audience, exercise, 0);
+            session.beginTransaction();
+            session.saveOrUpdate(course);
+            session.saveOrUpdate(exercise);
+            session.saveOrUpdate(audienceSchedule);
+            session.getTransaction().commit();
+        }
     }
 
     @BeforeAll
-    //@AfterEach
+    @AfterEach
     void annihilation() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE \"Audience\" RESTART IDENTITY CASCADE;").executeUpdate();
+            session.createSQLQuery("TRUNCATE \"AudienceSchedule\" RESTART IDENTITY CASCADE;").executeUpdate();
+            session.createSQLQuery("TRUNCATE \"Course\" RESTART IDENTITY CASCADE;").executeUpdate();
+            session.createSQLQuery("TRUNCATE \"Exercise\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Audience_audience_id_seq\" RESTART WITH 1;").executeUpdate();
             session.getTransaction().commit();
         }

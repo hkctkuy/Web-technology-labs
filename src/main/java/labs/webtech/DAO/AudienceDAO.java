@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AudienceDAO extends TableDAO<Audience, Long> {
 
-    List<Audience> getByTime(Integer time);
+    List<Audience> getFree(Integer time, Integer capacity);
 }
