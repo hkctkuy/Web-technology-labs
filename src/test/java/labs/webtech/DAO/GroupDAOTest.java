@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource(locations="classpath:application.properties")
-public class StudentDAOTest {
+public class GroupDAOTest {
 
     @Autowired
     private CourseDAO courseDAO;
@@ -29,59 +29,43 @@ public class StudentDAOTest {
     private SessionFactory sessionFactory;
 
     @Test
-    void testGetByGroup() {
+    void testGroupSize() {
         Group group = groupDAO.getById(1L);
-        List<Student> studentList = studentDAO.getByGroup(group);
-        assertEquals(studentList.size(), 3);
+        assertNotNull(group);
+        assertEquals(groupDAO.groupSize(group), 3);
+        // Empty group
+        group = new Group(111, 1, 1);
+        groupDAO.save(group);
+        assertEquals(groupDAO.groupSize(group), 0);
     }
 
     @Test
-    void testGetByGroupList() {
+    void testSizeByList() {
         List<Group> groupList = new ArrayList<>(groupDAO.getAll());
-        assertEquals(groupList.size(), 3);
-        List<Student> studentList = studentDAO.getByGroupList(groupList);
-        assertEquals(studentList.size(), 6);
+        assertNotNull(groupList);
+        int size = groupDAO.sizeByList(groupList);
+        assertEquals(size, 5);
     }
 
     @Test
-    void testGetByStream() {
-        List<Student> studentList = studentDAO.getByStream(1);
-        assertEquals(studentList.size(), 5);
+    void testGetFreeTime() {
+        Group group = groupDAO.getById(1L);
+        assertNotNull(group);
+        List<Integer> freeTime = groupDAO.getFreeTime(group);
+        assertEquals(freeTime.size(), 30);
+
+        group = groupDAO.getById(3L);
+        assertNotNull(group);
+        freeTime = groupDAO.getFreeTime(group);
+        assertEquals(freeTime.size(), 29);
     }
 
     @Test
-    void testGetByYear() {
-        List<Student> studentList = studentDAO.getByYear(1);
-        assertEquals(studentList.size(), 4);
-    }
-
-    @Test
-    void testGetByStreamAndYear() {
-        List<Student> studentList = studentDAO.getByStreamAndYear(1, 1);
-        assertEquals(studentList.size(), 3);
-        studentList = studentDAO.getByStreamAndYear(2, 2);
-        assertNull(studentList);
-    }
-
-    @Test
-    void testGetByCourse() {
-        // linal
-        Course course = courseDAO.getById(1L);
-        assertNotNull(course);
-        List<Student> studentList = studentDAO.getByCourse(course);
-        assertNotNull(studentList);
-        assertEquals(studentList.size(), 4);
-        // comlan
-        course = courseDAO.getById(2L);
-        assertNotNull(course);
-        studentList = studentDAO.getByCourse(course);
-        assertNull(studentList);
-        // compil
-        course = courseDAO.getById(3L);
-        assertNotNull(course);
-        studentList = studentDAO.getByCourse(course);
-        assertNotNull(studentList);
-        assertEquals(studentList.size(), 1);
+    void testGetFreeTimeByList() {
+        List<Group> groupList = new ArrayList<>(groupDAO.getAll());
+        assertNotNull(groupList);
+        List<Integer> freeTime = groupDAO.getFreeTimeByList(groupList);
+        assertEquals(freeTime.size(), 29);
     }
 
     @BeforeEach
@@ -89,10 +73,8 @@ public class StudentDAOTest {
         // Courses
         Course linal = new Course("Линейная алгебра", Course.Coverage.STREAM, 2, 1);
         Course complan = new Course("Комплексный анализ", Course.Coverage.STREAM, 1, 2);
-        Course compil = new Course("Комиляторные технологии", Course.Coverage.SPEC, 1, 0);
         courseDAO.save(linal);
         courseDAO.save(complan);
-        courseDAO.save(compil);
         // 1 stream, 1 year
         Group group = new Group(101, 1, 1);
         groupDAO.save(group);
@@ -115,10 +97,15 @@ public class StudentDAOTest {
         studentList = new ArrayList<>();
         studentList.add(new Student("Аааев", "Ааай", "Аааевич", group));
         studentDAO.saveCollection(studentList);
-        // Spec course
-        Student student = new Student("Спецов", "Степан", "Степанович", group);
-        studentDAO.save(student);
-        studentDAO.attachStudentSpecCourse(student, compil);
+        // Create some exercise
+        try (Session session = sessionFactory.openSession()) {
+            Exercise exercise = new Exercise(linal);
+            GroupSchedule groupSchedule = new GroupSchedule(group, exercise, 0);
+            session.beginTransaction();
+            session.saveOrUpdate(exercise);
+            session.saveOrUpdate(groupSchedule);
+            session.getTransaction().commit();
+        }
     }
 
     @BeforeAll
@@ -128,6 +115,7 @@ public class StudentDAOTest {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE \"Course\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"Group\" RESTART IDENTITY CASCADE;").executeUpdate();
+            session.createSQLQuery("TRUNCATE \"GroupSchedule\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"Student\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Course_course_id_seq\" RESTART WITH 1;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Group_group_id_seq\" RESTART WITH 1;").executeUpdate();

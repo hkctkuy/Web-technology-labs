@@ -6,14 +6,15 @@ import labs.webtech.table.CourseDist;
 import labs.webtech.table.Group;
 import labs.webtech.table.Student;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import java.nio.file.attribute.GroupPrincipal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Repository
 public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO {
@@ -54,7 +55,7 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
     }
 
     @Override
-    public List<Group> getByCourse(Course course) {
+    public List<Group> getByCourse(@NonNull Course course) {
         if (course.getCoverage() == Course.Coverage.SPEC) {
             return null;
         }
@@ -77,7 +78,7 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
 
     @SneakyThrows
     @Override
-    public void attachGroupCourse(Group group, Course course) {
+    public void attachGroupCourse(Group group, @NonNull Course course) {
         if (course.getCoverage() == Course.Coverage.SPEC) {
             throw new Exception("It is not possible to register an entire group for a special course");
         }
@@ -113,5 +114,27 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
             size += groupSize(group);
         }
         return size;
+    }
+
+    @Override
+    public List<Integer> getFreeTime(Group group) {
+        List<Integer> freeTime = new ArrayList<>(IntStream.range(0, 30).boxed().toList());
+        try (Session session = sessionFactory.openSession()) {
+            Query<Integer> query = session
+                    .createQuery("SELECT gs.time FROM GroupSchedule gs WHERE gs.group = :group", Integer.class)
+                    .setParameter("group", group);
+            List<Integer> notFreeTime = query.getResultList();
+            freeTime.removeAll(notFreeTime);
+            return freeTime;
+        }
+    }
+
+    @Override
+    public List<Integer> getFreeTimeByList(@NonNull List<Group> groupList) {
+        List<Integer> freeTime = new ArrayList<>(IntStream.range(0, 30).boxed().toList());
+        for (Group group: groupList) {
+            freeTime.retainAll(getFreeTime(group));
+        }
+        return freeTime;
     }
 }

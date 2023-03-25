@@ -94,10 +94,10 @@ public class StudentDAOImpl extends TableDAOImpl<Student, Long> implements Stude
         if (course.getYear() > student.getGroup().getYear()) {
             throw new Exception("Pretty young student for that course");
         }
-        SpecCourseDist spec_SpecCourseDist = new SpecCourseDist(student, course);
+        SpecCourseDist specCourseDist = new SpecCourseDist(student, course);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.saveOrUpdate(spec_SpecCourseDist);
+            session.saveOrUpdate(specCourseDist);
             session.getTransaction().commit();
         }
     }

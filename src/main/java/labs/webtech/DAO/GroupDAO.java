@@ -21,4 +21,7 @@ public interface GroupDAO extends TableDAO<Group, Long> {
 
     int sizeByList(List<Group> groupList);
 
+    List<Integer> getFreeTime(Group group);
+
+    List<Integer> getFreeTimeByList(List<Group> groupList);
 }
