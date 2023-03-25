@@ -71,7 +71,7 @@ DROP TABLE IF EXISTS "AudienceSchedule" CASCADE;
 CREATE TABLE "AudienceSchedule" (
 	audience_id int REFERENCES "Audience" (audience_id) ON DELETE RESTRICT,
 	exercise_id int REFERENCES "Exercise" (exercise_id) ON DELETE RESTRICT,
-    time int, -- Number of lesson
+    time int CHECK (time < 30), -- Number of lesson
     PRIMARY KEY (audience_id, time)
 );
 
@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS "GroupSchedule" CASCADE;
 CREATE TABLE "GroupSchedule" (
     group_id int REFERENCES "Group" (group_id) ON DELETE RESTRICT,
     exercise_id int REFERENCES "Exercise" (exercise_id) ON DELETE RESTRICT,
-    time int, -- Number of lesson
+    time int CHECK (time < 30), -- Number of lesson
     PRIMARY KEY (group_id, time)
 );
 
@@ -87,7 +87,7 @@ DROP TABLE IF EXISTS "LecturerSchedule" CASCADE;
 CREATE TABLE "LecturerSchedule" (
     lecturer_id int REFERENCES "Lecturer" (lecturer_id) ON DELETE RESTRICT,
     exercise_id int REFERENCES "Exercise" (exercise_id) ON DELETE RESTRICT,
-    time int, -- Number of lesson
+    time int CHECK (time < 30), -- Number of lesson
     PRIMARY KEY (lecturer_id, time)
 );
 

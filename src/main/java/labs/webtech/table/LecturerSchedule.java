@@ -3,6 +3,7 @@ package labs.webtech.table;
 import labs.webtech.CompositeId.LecturerScheduleId;
 
 import lombok.*;
+import org.hibernate.annotations.Check;
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
         uniqueConstraints = {
         @UniqueConstraint(columnNames = {"lecturer_id", "time"})
 })
+@Check(constraints = "time < 30")
 @Getter
 @Setter
 @Builder
