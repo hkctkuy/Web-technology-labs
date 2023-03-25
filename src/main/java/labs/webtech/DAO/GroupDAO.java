@@ -19,4 +19,6 @@ public interface GroupDAO extends TableDAO<Group, Long> {
 
     int groupSize(Group group);
 
+    int sizeByList(List<Group> groupList);
+
 }

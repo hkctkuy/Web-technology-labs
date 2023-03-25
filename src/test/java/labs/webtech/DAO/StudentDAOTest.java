@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource(locations="classpath:application.properties")
-public class StudentDAOTest {
+public class StudentDAOTest { // Student and Group DAO tests
 
     @Autowired
     private CourseDAO courseDAO;
@@ -95,6 +95,14 @@ public class StudentDAOTest {
         group = new Group(111, 1, 1);
         groupDAO.save(group);
         assertEquals(groupDAO.groupSize(group), 0);
+    }
+
+    @Test
+    void testSizeByList() {
+        List<Group> groupList = new ArrayList<>(groupDAO.getAll());
+        assertNotNull(groupList);
+        int size = groupDAO.sizeByList(groupList);
+        assertEquals(size, 6);
     }
 
     @BeforeEach

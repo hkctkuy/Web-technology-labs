@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.nio.file.attribute.GroupPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,4 +103,15 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
         }
     }
 
+    @Override
+    public int sizeByList(List<Group> groupList) {
+        int size = 0;
+        if (groupList == null) {
+            return size;
+        }
+        for (Group group: groupList) {
+            size += groupSize(group);
+        }
+        return size;
+    }
 }
