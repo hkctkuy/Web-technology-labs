@@ -20,10 +20,8 @@ public class LecturerDAOTest {
 
     @Autowired
     private CourseDAO courseDAO;
-
     @Autowired
     private LecturerDAO lecturerDAO;
-
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -114,12 +112,13 @@ public class LecturerDAOTest {
 
     @BeforeAll
     @AfterEach
-    void annihilation() {
+    void beforeAll() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE \"Course\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"Exercise\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"Lecturer\" RESTART IDENTITY CASCADE;").executeUpdate();
+            session.createSQLQuery("TRUNCATE \"LecturerDist\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"LecturerSchedule\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Course_course_id_seq\" RESTART WITH 1;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Exercise_exercise_id_seq\" RESTART WITH 1;").executeUpdate();

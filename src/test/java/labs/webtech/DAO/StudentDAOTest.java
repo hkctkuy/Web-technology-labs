@@ -123,7 +123,7 @@ public class StudentDAOTest {
 
     @BeforeAll
     @AfterEach
-    void annihilation() {
+    void beforeAll() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE \"Course\" RESTART IDENTITY CASCADE;").executeUpdate();

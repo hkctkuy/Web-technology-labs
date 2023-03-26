@@ -76,7 +76,7 @@ public class AudienceDAOTest {
 
     @BeforeAll
     @AfterEach
-    void annihilation() {
+    void beforeAll() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE \"Audience\" RESTART IDENTITY CASCADE;").executeUpdate();
