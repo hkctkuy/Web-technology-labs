@@ -4,6 +4,7 @@ import labs.webtech.DAO.AudienceDAO;
 import labs.webtech.table.Audience;
 import labs.webtech.table.AudienceSchedule;
 
+import labs.webtech.table.Exercise;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,18 @@ public class AudienceDAOImpl extends TableDAOImpl<Audience, Long> implements Aud
     }
 
     @Override
-    public List<Audience> getFree(Integer time, Integer capacity) {
+    public boolean isFree(Audience audience, Integer time) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<AudienceSchedule> query = session
+                    .createQuery("SELECT asch FROM AudienceSchedule asch WHERE asch.time = :time AND asch.audience = :audience", AudienceSchedule.class)
+                    .setParameter("audience", audience)
+                    .setParameter("time", time);
+            return query.getResultList().size() == 0;
+        }
+    }
+
+    @Override
+    public List<Audience> getFreeAudience(Integer time, Integer capacity) {
         try (Session session = sessionFactory.openSession()) {
             // Get audiences with the specified capacity
             Query<Audience> query = session
@@ -42,6 +54,16 @@ public class AudienceDAOImpl extends TableDAOImpl<Audience, Long> implements Aud
             }
             audienceList.removeAll(notFreeAudienceList);
             return audienceList;
+        }
+    }
+
+    @Override
+    public void bindToExercise(Audience audience, Exercise exercise, Integer time) {
+        try (Session session = sessionFactory.openSession()) {
+            AudienceSchedule audienceSchedule = new AudienceSchedule(audience, exercise, time);
+            session.beginTransaction();
+            session.saveOrUpdate(audienceSchedule);
+            session.getTransaction().commit();
         }
     }
 }

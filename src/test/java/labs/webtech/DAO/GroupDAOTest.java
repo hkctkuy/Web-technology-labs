@@ -48,16 +48,34 @@ public class GroupDAOTest {
     }
 
     @Test
+    void testIsFree() {
+        Group group = groupDAO.getById(3L);
+        assertNotNull(group);
+        assertFalse(groupDAO.isFree(group, 0));
+        assertFalse(groupDAO.isFree(group, 1));
+        assertTrue(groupDAO.isFree(group, 2));
+    }
+
+    @Test
+    void testIsFreeByList() {
+        List<Group> groupList = new ArrayList<>(groupDAO.getAll());
+        assertNotNull(groupList);
+        assertFalse(groupDAO.isFreeByList(groupList, 0));
+        assertFalse(groupDAO.isFreeByList(groupList, 1));
+        assertTrue(groupDAO.isFreeByList(groupList, 2));
+    }
+
+    @Test
     void testGetFreeTime() {
         Group group = groupDAO.getById(1L);
         assertNotNull(group);
         List<Integer> freeTime = groupDAO.getFreeTime(group);
-        assertEquals(freeTime.size(), 30);
+        assertEquals(freeTime.size(), 29);
 
         group = groupDAO.getById(3L);
         assertNotNull(group);
         freeTime = groupDAO.getFreeTime(group);
-        assertEquals(freeTime.size(), 29);
+        assertEquals(freeTime.size(), 28);
     }
 
     @Test
@@ -65,7 +83,7 @@ public class GroupDAOTest {
         List<Group> groupList = new ArrayList<>(groupDAO.getAll());
         assertNotNull(groupList);
         List<Integer> freeTime = groupDAO.getFreeTimeByList(groupList);
-        assertEquals(freeTime.size(), 29);
+        assertEquals(freeTime.size(), 28);
     }
 
     @BeforeEach
@@ -75,8 +93,10 @@ public class GroupDAOTest {
         Course complan = new Course("Комплексный анализ", Course.Coverage.STREAM, 1, 2);
         courseDAO.save(linal);
         courseDAO.save(complan);
+        List<Group> groupList = new ArrayList<>();
         // 1 stream, 1 year
         Group group = new Group(101, 1, 1);
+        groupList.add(group);
         groupDAO.save(group);
         List<Student> studentList = new ArrayList<>();
         studentList.add(new Student("Первов", "Петр", "Петрович", group));
@@ -86,6 +106,7 @@ public class GroupDAOTest {
         groupDAO.attachGroupCourse(group, linal);
         // 2 stream, 1 year
         group = new Group(102, 2, 1);
+        groupList.add(group);
         groupDAO.save(group);
         studentList = new ArrayList<>();
         studentList.add(new Student("Четвертак", "Чибис", "Чибисович", group));
@@ -93,19 +114,20 @@ public class GroupDAOTest {
         groupDAO.attachGroupCourse(group, linal);
         // 1 stream, 2 year
         group = new Group(201, 1, 2);
+        groupList.add(group);
         groupDAO.save(group);
         studentList = new ArrayList<>();
         studentList.add(new Student("Аааев", "Ааай", "Аааевич", group));
         studentDAO.saveCollection(studentList);
         // Create some exercise
+        Exercise exercise = new Exercise(linal);
         try (Session session = sessionFactory.openSession()) {
-            Exercise exercise = new Exercise(linal);
-            GroupSchedule groupSchedule = new GroupSchedule(group, exercise, 0);
             session.beginTransaction();
             session.saveOrUpdate(exercise);
-            session.saveOrUpdate(groupSchedule);
             session.getTransaction().commit();
         }
+        groupDAO.bindToExercise(group, exercise, 0);
+        groupDAO.bindToExerciseByList(groupList, exercise, 1);
     }
 
     @BeforeAll

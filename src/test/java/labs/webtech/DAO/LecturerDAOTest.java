@@ -56,6 +56,14 @@ public class LecturerDAOTest {
     }
 
     @Test
+    void testIsFree() {
+        Lecturer lecturer = lecturerDAO.getById(1L);
+        assertNotNull(lecturer);
+        assertFalse(lecturerDAO.isFree(lecturer, 0));
+        assertTrue(lecturerDAO.isFree(lecturer, 1));
+    }
+
+    @Test
     void testGetFreeTime() {
         Lecturer lecturer = lecturerDAO.getById(1L);
         assertNotNull(lecturer);
@@ -81,16 +89,15 @@ public class LecturerDAOTest {
         lecturerDAO.attachLecturerCourse(mataner, matan);
         lecturerDAO.attachLecturerCourse(mataner, linal);
         // Create some exercise
+        Course course = new Course("", Course.Coverage.STREAM, 1, 1);
+        Exercise exercise = new Exercise(course);
         try (Session session = sessionFactory.openSession()) {
-            Course course = new Course("", Course.Coverage.STREAM, 1, 1);
-            Exercise exercise = new Exercise(course);
-            LecturerSchedule lecturerSchedule = new LecturerSchedule(linaler, exercise, 0);
             session.beginTransaction();
             session.saveOrUpdate(course);
             session.saveOrUpdate(exercise);
-            session.saveOrUpdate(lecturerSchedule);
             session.getTransaction().commit();
         }
+        lecturerDAO.bindToExercise(linaler, exercise, 0);
     }
 
     @BeforeAll

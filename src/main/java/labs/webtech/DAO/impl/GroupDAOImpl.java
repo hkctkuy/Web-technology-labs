@@ -1,10 +1,7 @@
 package labs.webtech.DAO.impl;
 
 import labs.webtech.DAO.GroupDAO;
-import labs.webtech.table.Course;
-import labs.webtech.table.CourseDist;
-import labs.webtech.table.Group;
-import labs.webtech.table.Student;
+import labs.webtech.table.*;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -117,6 +114,27 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
     }
 
     @Override
+    public boolean isFree(Group group, Integer time) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<GroupSchedule> query = session
+                    .createQuery("SELECT gs FROM GroupSchedule gs WHERE gs.time = :time AND gs.group = :group", GroupSchedule.class)
+                    .setParameter("group", group)
+                    .setParameter("time", time);
+            return query.getResultList().size() == 0;
+        }
+    }
+
+    @Override
+    public boolean isFreeByList(@NonNull List<Group> groupList, Integer time) {
+        for (Group group: groupList) {
+            if (!isFree(group, time)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public List<Integer> getFreeTime(Group group) {
         List<Integer> freeTime = new ArrayList<>(IntStream.range(0, 30).boxed().toList());
         try (Session session = sessionFactory.openSession()) {
@@ -136,5 +154,22 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
             freeTime.retainAll(getFreeTime(group));
         }
         return freeTime;
+    }
+
+    @Override
+    public void bindToExercise(Group group, Exercise exercise, Integer time) {
+        try (Session session = sessionFactory.openSession()) {
+            GroupSchedule groupSchedule = new GroupSchedule(group, exercise, time);
+            session.beginTransaction();
+            session.saveOrUpdate(groupSchedule);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void bindToExerciseByList(@NonNull List<Group> groupList, Exercise exercise, Integer time) {
+        for (Group group: groupList) {
+            bindToExercise(group, exercise, time);
+        }
     }
 }

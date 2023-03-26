@@ -1,12 +1,10 @@
 package labs.webtech.DAO.impl;
 
-import labs.webtech.DAO.CourseDAO;
 import labs.webtech.DAO.LecturerDAO;
 import labs.webtech.table.*;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -51,6 +49,17 @@ public class LecturerDAOImpl extends TableDAOImpl<Lecturer, Long> implements Lec
     }
 
     @Override
+    public boolean isFree(Lecturer lecturer, Integer time) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<LecturerSchedule> query = session
+                    .createQuery("SELECT ls FROM LecturerSchedule ls WHERE ls.time = :time AND ls.lecturer = :lecturer", LecturerSchedule.class)
+                    .setParameter("lecturer", lecturer)
+                    .setParameter("time", time);
+            return query.getResultList().size() == 0;
+        }
+    }
+
+    @Override
     public List<Integer> getFreeTime(Lecturer lecturer) {
         List<Integer> freeTime = new ArrayList<>(IntStream.range(0, 30).boxed().toList());
         try (Session session = sessionFactory.openSession()) {
@@ -60,6 +69,16 @@ public class LecturerDAOImpl extends TableDAOImpl<Lecturer, Long> implements Lec
             List<Integer> notFreeTime = query.getResultList();
             freeTime.removeAll(notFreeTime);
             return freeTime;
+        }
+    }
+
+    @Override
+    public void bindToExercise(Lecturer lecturer, Exercise exercise, Integer time) {
+        try (Session session = sessionFactory.openSession()) {
+            LecturerSchedule lecturerSchedule = new LecturerSchedule(lecturer, exercise, time);
+            session.beginTransaction();
+            session.saveOrUpdate(lecturerSchedule);
+            session.getTransaction().commit();
         }
     }
 }

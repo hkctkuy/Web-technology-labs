@@ -1,10 +1,15 @@
 package labs.webtech.DAO;
 
 import labs.webtech.table.Audience;
+import labs.webtech.table.Exercise;
 
 import java.util.List;
 
 public interface AudienceDAO extends TableDAO<Audience, Long> {
 
-    List<Audience> getFree(Integer time, Integer capacity);
+    boolean isFree(Audience audience, Integer time);
+
+    List<Audience> getFreeAudience(Integer time, Integer capacity);
+
+    void bindToExercise(Audience audience, Exercise exercise, Integer time);
 }
