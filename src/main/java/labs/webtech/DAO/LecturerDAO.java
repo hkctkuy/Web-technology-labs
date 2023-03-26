@@ -7,6 +7,7 @@ import labs.webtech.table.Lecturer;
 import java.util.List;
 
 public interface LecturerDAO extends TableDAO<Lecturer, Long> {
+    boolean isAttached(Lecturer lecturer, Course course);
 
     void attachLecturerCourse(Lecturer lecturer, Course course);
 

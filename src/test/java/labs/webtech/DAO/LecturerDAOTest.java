@@ -28,6 +28,18 @@ public class LecturerDAOTest {
     private SessionFactory sessionFactory;
 
     @Test
+    void testIsAttached() {
+        Lecturer lecturer = lecturerDAO.getById(1L);
+        assertNotNull(lecturer);
+        Course course = courseDAO.getById(1L);
+        assertNotNull(course);
+        assertTrue(lecturerDAO.isAttached(lecturer, course));
+        course = courseDAO.getById(2L);
+        assertNotNull(course);
+        assertFalse(lecturerDAO.isAttached(lecturer, course));
+    }
+
+    @Test
     void testGetCourseList() {
         Lecturer lecturer = lecturerDAO.getById(1L);
         assertNotNull(lecturer);

@@ -21,6 +21,17 @@ public class LecturerDAOImpl extends TableDAOImpl<Lecturer, Long> implements Lec
 
 
     @Override
+    public boolean isAttached(Lecturer lecturer, Course course) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<LecturerDist> query = session
+                    .createQuery("SELECT ld FROM LecturerDist ld WHERE ld.lecturer = :lecturer AND ld.course = :course", LecturerDist.class)
+                    .setParameter("lecturer", lecturer)
+                    .setParameter("course", course);
+            return query.getResultList().size() != 0;
+        }
+    }
+
+    @Override
     public void attachLecturerCourse(Lecturer lecturer, Course course) {
         LecturerDist lecturerDist = new LecturerDist(lecturer, course);
         try (Session session = sessionFactory.openSession()) {
