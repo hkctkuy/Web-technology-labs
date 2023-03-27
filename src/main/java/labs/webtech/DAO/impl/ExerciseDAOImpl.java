@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -61,5 +62,80 @@ public class ExerciseDAOImpl extends TableDAOImpl<Exercise, Long> implements Exe
         audienceDAO.bindToExercise(audience, exercise, time);
         groupDAO.bindToExerciseByList(groupList, exercise, time);
         lecturerDAO.bindToExercise(lecturer, exercise, time);
+    }
+
+    @SneakyThrows
+    @Override
+    public void scheduleExercise(Course course, List<Group> groupList) {
+        int depth = course.getDepth();
+        int size = groupDAO.sizeByList(groupList);
+        List<Integer> freeTime = groupDAO.getFreeTimeByList(groupList);
+        List<Lecturer> lecturerList = courseDAO.getLecturerList(course);
+        for (Lecturer lecturer: lecturerList) {
+            List<Integer> lecturerFreeTime = lecturerDAO.getFreeTime(lecturer);
+            lecturerFreeTime.retainAll(freeTime);
+            if (lecturerFreeTime.size() < depth) {
+                lecturerList.remove(lecturer);
+            }
+            // find try to audiences
+            Audience[] audienceArray = new Audience[depth];
+            Integer[] timeArray = new Integer[depth];
+            int count = 0;
+            for (Integer time: lecturerFreeTime) {
+                if (count >= depth) {
+                    break;
+                }
+                List<Audience> audienceList = audienceDAO.getFreeAudienceList(time, size);
+                if (audienceList.size() == 0) {
+                    continue;
+                }
+                audienceArray[count] = audienceList.get(0);
+                timeArray[count] = time;
+                count++;
+            }
+            if (count < depth) {
+                continue;
+            }
+            for (int i = 0; i < depth; i++) {
+                addExercise(course, groupList, lecturer, audienceArray[i], timeArray[i]);
+            }
+            return;
+        }
+        throw new Exception("Can not find lecturer");
+    }
+
+    @SneakyThrows
+    @Override
+    public void scheduleCourse(Course course) {
+        List<Group> groupList = groupDAO.getByCourse(course);
+        if (course.getCoverage() == Course.Coverage.STREAM) {
+            for (int stream = 1; stream <= 3; stream++) {
+                List<Group> streamGroupList = groupDAO.getByStreamAndYear(stream, course.getYear());
+                if (streamGroupList == null) {
+                    continue;
+                }
+                streamGroupList.retainAll(groupList);
+                if (streamGroupList.size() == 0) {
+                    continue;
+                }
+                scheduleExercise(course, streamGroupList);
+            }
+        } else if (course.getCoverage() == Course.Coverage.GROUP) {
+            for (Group group: groupList) {
+                List<Group> oneGroupList = new ArrayList<>();
+                oneGroupList.add(group);
+                scheduleExercise(course, oneGroupList);
+            }
+        } else {
+            throw new Exception("Spec course scheduling is not supported yet");
+        }
+    }
+
+    @Override
+    public void generateSchedule() {
+        List<Course> courseList = new ArrayList<>(courseDAO.getAll());
+        for (Course course: courseList) {
+            scheduleCourse(course);
+        }
     }
 }

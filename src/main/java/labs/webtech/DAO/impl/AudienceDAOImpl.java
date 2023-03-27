@@ -31,7 +31,7 @@ public class AudienceDAOImpl extends TableDAOImpl<Audience, Long> implements Aud
     }
 
     @Override
-    public List<Audience> getFreeAudience(Integer time, Integer capacity) {
+    public List<Audience> getFreeAudienceList(Integer time, Integer capacity) {
         try (Session session = sessionFactory.openSession()) {
             // Get audiences with the specified capacity
             Query<Audience> query = session

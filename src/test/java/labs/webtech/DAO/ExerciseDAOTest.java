@@ -53,6 +53,7 @@ public class ExerciseDAOTest {
         assertFalse(groupDAO.isFreeByList(groupList, 0));
         assertFalse(groupDAO.isFreeByList(groupList, 1));
         assertTrue(groupDAO.isFreeByList(groupList, 2));
+        assertEquals(groupDAO.getFreeTimeByList(groupList).size(), 28);
         // Check lecturers
         Lecturer lecturer = lecturerDAO.getById(1L);
         assertNotNull(lecturer);
@@ -64,6 +65,45 @@ public class ExerciseDAOTest {
         assertFalse(lecturerDAO.isFree(lecturer, 0));
         assertFalse(lecturerDAO.isFree(lecturer, 1));
         assertTrue(lecturerDAO.isFree(lecturer, 2));
+    }
+
+    @Test
+    void testScheduleExercise() {
+        Course course = new Course("", Course.Coverage.STREAM, 2, 1);
+        courseDAO.save(course);
+        Lecturer lecturer = new Lecturer("", "", "");
+        lecturerDAO.save(lecturer);
+        lecturerDAO.attachLecturerCourse(lecturer, course);
+        List<Group> groupList = new ArrayList<>(groupDAO.getAll());
+        assertEquals(lecturerDAO.getFreeTime(lecturer).size(), 30);
+        assertEquals(groupDAO.getFreeTimeByList(groupList).size(), 28);
+        exerciseDAO.scheduleExercise(course, groupList);
+        assertEquals(lecturerDAO.getFreeTime(lecturer).size(), 28);
+        assertEquals(groupDAO.getFreeTimeByList(groupList).size(), 26);
+    }
+
+    @Test
+    void testScheduleCourse() {
+        // Add course
+        Course course = new Course("", Course.Coverage.STREAM, 2, 1);
+        courseDAO.save(course);
+        // Add lecturer
+        Lecturer lecturer = new Lecturer("", "", "");
+        lecturerDAO.save(lecturer);
+        lecturerDAO.attachLecturerCourse(lecturer, course);
+        // Add group
+        List<Group> groupList = new ArrayList<>(groupDAO.getAll());
+        Group group = groupDAO.getById(1L);
+        groupDAO.attachGroupCourse(group, course);
+
+        assertEquals(lecturerDAO.getFreeTime(lecturer).size(), 30);
+        assertEquals(groupDAO.getFreeTimeByList(groupList).size(), 28);
+        assertEquals(groupDAO.getFreeTime(group).size(), 28);
+        exerciseDAO.scheduleCourse(course);
+        assertEquals(lecturerDAO.getFreeTime(lecturer).size(), 28);
+        assertEquals(groupDAO.getFreeTimeByList(groupList).size(), 26);
+        group = groupDAO.getById(2L);
+        assertEquals(groupDAO.getFreeTime(group).size(), 28);
     }
 
     @BeforeEach

@@ -79,10 +79,10 @@ public class GroupDAOImpl extends TableDAOImpl<Group, Long> implements GroupDAO 
         if (course.getCoverage() == Course.Coverage.SPEC) {
             throw new Exception("It is not possible to register an entire group for a special course");
         }
-        if (course.getYear() > group.getYear()) {
+        if (!course.getYear().equals(group.getYear())) {
             throw new Exception("Pretty young group for that course");
         }
-                CourseDist courseDist = new CourseDist(group, course);
+        CourseDist courseDist = new CourseDist(group, course);
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.saveOrUpdate(courseDist);

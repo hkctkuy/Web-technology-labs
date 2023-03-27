@@ -39,17 +39,17 @@ public class AudienceDAOTest {
     }
 
     @Test
-    void testGetFree() {
-        List<Audience> audienceList = audienceDAO.getFreeAudience(0, 30);
+    void testGetFreeList() {
+        List<Audience> audienceList = audienceDAO.getFreeAudienceList(0, 30);
         assertNotNull(audienceList);
         assertEquals(audienceList.size(), 3);
-        audienceList = audienceDAO.getFreeAudience(0, 200);
+        audienceList = audienceDAO.getFreeAudienceList(0, 200);
         assertNotNull(audienceList);
         assertEquals(audienceList.size(), 1);
-        audienceList = audienceDAO.getFreeAudience(1, 30);
+        audienceList = audienceDAO.getFreeAudienceList(1, 30);
         assertNotNull(audienceList);
         assertEquals(audienceList.size(), 4);
-        audienceList = audienceDAO.getFreeAudience(0, 1000);
+        audienceList = audienceDAO.getFreeAudienceList(0, 1000);
         assertNull(audienceList);
     }
 
