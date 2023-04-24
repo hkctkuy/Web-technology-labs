@@ -1,4 +1,4 @@
-package labs.webtech.CompositeId;
+package labs.webtech.compositeId;
 
 import labs.webtech.table.Course;
 import labs.webtech.table.Lecturer;

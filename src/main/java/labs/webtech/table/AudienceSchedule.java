@@ -1,6 +1,6 @@
 package labs.webtech.table;
 
-import labs.webtech.CompositeId.AudienceScheduleId;
+import labs.webtech.compositeId.AudienceScheduleId;
 
 import lombok.*;
 import org.hibernate.annotations.Check;

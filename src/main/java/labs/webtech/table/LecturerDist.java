@@ -1,6 +1,6 @@
 package labs.webtech.table;
 
-import labs.webtech.CompositeId.LecturerDistId;
+import labs.webtech.compositeId.LecturerDistId;
 
 import lombok.*;
 import javax.persistence.*;
