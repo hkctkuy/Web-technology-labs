@@ -84,7 +84,7 @@ public class ExerciseDAOTest {
 
     @Test
     void testScheduleCourse() {
-        // Add course
+        // Add stream course
         Course course = new Course("", Course.Coverage.STREAM, 2, 1);
         courseDAO.save(course);
         // Add lecturer
@@ -104,6 +104,16 @@ public class ExerciseDAOTest {
         assertEquals(groupDAO.getFreeTimeByList(groupList).size(), 26);
         group = groupDAO.getById(2L);
         assertEquals(groupDAO.getFreeTime(group).size(), 28);
+
+        // Add group course
+        course = new Course("_", Course.Coverage.GROUP, 2, 1);
+        courseDAO.save(course);
+        lecturerDAO.attachLecturerCourse(lecturer, course);
+        groupDAO.attachGroupCourse(group, course);
+        exerciseDAO.scheduleCourse(course);
+        assertEquals(lecturerDAO.getFreeTime(lecturer).size(), 26);
+        assertEquals(groupDAO.getFreeTimeByList(groupList).size(), 24);
+        assertEquals(groupDAO.getFreeTime(group).size(), 26);
     }
 
     @BeforeEach
