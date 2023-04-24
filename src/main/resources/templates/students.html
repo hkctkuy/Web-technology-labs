@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <title>Студенты</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <style>
+    .indent {
+      margin-left: 30px;
+      margin-right: 30px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="general :: page-header"> </div>
+
+<div class="indent">
+  <form method="get" action="/editStudent">
+    <button id="addStudentButton" type="submit" class="btn btn-primary">Добавить студента</button>
+  </form>
+  <br>
+
+  <table class="table table-bordered table-warning">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col"> Фамилия </th>
+      <th scope="col"> Имя </th>
+      <th scope="col"> Отчество </th>
+      <th scope="col"> Группа </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${students.isEmpty()}">
+      <td colspan="6"> Такого студента нет. <a href="/editStudent">Добавить?</a></td>
+    </tr>
+    <tr th:each="student : ${students}">
+      <td>
+        <a th:href="'/student?id=' + ${student.getId()}">
+          <span th:text="${student.getName()}"> </span>
+        </a>
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div th:replace="general :: site-script"></div>
+
+</body>
+</html>
