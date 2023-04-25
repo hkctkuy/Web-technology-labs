@@ -26,11 +26,12 @@ dependencies {
 	implementation 'org.postgresql:postgresql:42.3.3'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.thymeleaf:thymeleaf:3.1.0.M1'
-	implementation 'org.thymeleaf:thymeleaf-spring5:3.1.0.M1'
+	implementation 'org.thymeleaf:thymeleaf-spring6:3.1.0.M1'
 	implementation 'org.seleniumhq.selenium:selenium-java'
 	implementation 'org.testng:testng:7.1.0'
+    implementation 'org.jetbrains:annotations:20.1.0'
 
-	compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 
 	annotationProcessor 'org.projectlombok:lombok'
