@@ -22,7 +22,7 @@
   <h4>
     <span th:text="${group.getNumber()}"> </span> группа,
     <span th:text="${group.getYear()}"> </span> курс,
-    <a th:href="'/stream?stream=' + ${group.getStream()}">
+    <a id="streamLink" th:href="'/stream?stream=' + ${group.getStream()}">
       <span th:text="${group.getStream()}"> </span>
     </a> поток. Список учащихся
   </h4>
@@ -33,7 +33,7 @@
       <th scope="col"> ФИО </th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="studentLink">
     <tr th:if="${students.isEmpty()}">
       <td> В группе пока нет ни одного студента. </td>
     </tr>
@@ -44,7 +44,6 @@
         </a>
       </td>
     </tr>
-
     </tbody>
   </table>
 

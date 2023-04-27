@@ -32,18 +32,18 @@
             <th scope="col"> группа </th>
           </tr>
           </thead>
-          <tbody th:with="students=${studentService.getByStreamAndYear(stream, year)}">
+          <tbody id="year" th:with="students=${studentService.getByStreamAndYear(stream, year)}">
             <tr th:if="${students} == null">
               <td> Нет ни одного студента. </td>
             </tr>
             <tr th:each="student : ${students}">
               <td>
-                <a th:href="'/student?id=' + ${student.getId()}">
+                <a id="studentLink" th:href="'/student?id=' + ${student.getId()}">
                   <span th:text="${student.getSurname()} + ' ' + ${student.getName()} + ' ' + ${student.getPatronymic()}"> </span>
                 </a>
               </td>
               <td th:with="group=${student.getGroup()}">
-                <a th:href="'/group?id=' + ${group.getId()}">
+                <a id="groupLink" th:href="'/group?id=' + ${group.getId()}">
                   <span th:text="${group.getNumber()}"> </span>
                 </a>
               </td>

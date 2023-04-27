@@ -21,10 +21,10 @@
   <h4 th:text="${student.getSurname()} + ' ' + ${student.getName()} + ' ' + ${student.getPatronymic()}"></h4>
   <h4 th:with="group=${student.getGroup()}">
     <span th:text="${group.getYear()}"> </span> курс,
-    <a th:href="'/stream?stream=' + ${group.getStream()}">
+    <a id="streamLink" th:href="'/stream?stream=' + ${group.getStream()}">
       <span th:text="${group.getStream()}"> </span>
     </a> поток,
-    <a th:href="'/group?id=' + ${group.getId()}">
+    <a id="groupLink" th:href="'/group?id=' + ${group.getId()}">
       <span th:text="${group.getNumber()}"> </span>
     </a> группа
   </h4>
