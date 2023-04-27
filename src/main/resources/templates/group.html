@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title>Студенты</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -12,41 +11,46 @@
       margin-top: 20px;
     }
   </style>
+  <title th:text="${group.getNumber()} + ' группа'"></title>
 </head>
+
 <body>
 <div th:replace="general :: page-header"> </div>
 
 <div class="indent">
-  <form method="get" action="/editStudent">
-    <button id="addStudentButton" type="submit" class="btn btn-primary">Добавить студента</button>
-  </form>
-  <br>
+
+  <h4>
+    <span th:text="${group.getNumber()}"> </span> группа,
+    <span th:text="${group.getYear()}"> </span> курс,
+    <a th:href="'/stream?stream=' + ${group.getStream()}">
+      <span th:text="${group.getStream()}"> </span>
+    </a> поток. Список учащихся
+  </h4>
 
   <table class="table table-bordered table-warning">
     <thead class="thead-dark">
     <tr>
-      <th scope="col"> Фамилия </th>
-      <th scope="col"> Имя </th>
-      <th scope="col"> Отчество </th>
-      <th scope="col"> Группа </th>
+      <th scope="col"> ФИО </th>
     </tr>
     </thead>
     <tbody>
     <tr th:if="${students.isEmpty()}">
-      <td colspan="6"> Такого студента нет. <a href="/editStudent">Добавить?</a></td>
+      <td> В группе пока нет ни одного студента. </td>
     </tr>
     <tr th:each="student : ${students}">
       <td>
         <a th:href="'/student?id=' + ${student.getId()}">
-          <span th:text="${student.getName()}"> </span>
+          <span th:text="${student.getSurname()} + ' ' + ${student.getName()} + ' ' + ${student.getPatronymic()}"> </span>
         </a>
       </td>
     </tr>
 
     </tbody>
   </table>
+
 </div>
 
+<div th:replace="general :: site-footer"></div>
 <div th:replace="general :: site-script"></div>
 
 </body>

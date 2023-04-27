@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 @Controller
 public class StudentController {
 
@@ -40,15 +38,6 @@ public class StudentController {
         model.addAttribute("studentService", studentDAO);
         model.addAttribute("groupService", groupDAO);
         return "student";
-    }
-
-    @GetMapping("/students")
-    public String studentListPage(Model model) {
-        List<Student> students = (List<Student>) studentDAO.getAll();
-        model.addAttribute("studentList", students);
-        model.addAttribute("studentService", studentDAO);
-        model.addAttribute("groupService", groupDAO);
-        return "students";
     }
 
     @GetMapping("/editStudent")
@@ -87,9 +76,9 @@ public class StudentController {
             student.setName(name);
             student.setPatronymic(patronymic);
             student.setGroup(group);
-        } else {
+        } /*else {
             student = new Student(id, surname, name, patronymic, group);
-        }
+        }*/
 
         model.addAttribute("error_msg", "Data not saved");
         return "errorPage";

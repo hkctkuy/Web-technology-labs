@@ -11,8 +11,8 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping(value = "/allStudents" )
-    public String allPersons() {
-        return "students";
+    @RequestMapping(value = "/groups")
+    public String groups() {
+        return "groups";
     }
 }

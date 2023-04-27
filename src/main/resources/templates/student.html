@@ -11,30 +11,33 @@
       margin-top: 20px;
     }
   </style>
-  <title>Информация о человеке</title>
+  <title th:text="${student.getSurname()} + ' ' + ${student.getName()} + ' ' + ${student.getPatronymic()}"></title>
 </head>
 
 <body>
 <div th:replace="general :: page-header"> </div>
 
 <div class="indent">
-  <div id="studentInfo">
-    <h4 th:text="${student.getName()}"></h4>
-    <p th:if="${student.getSurname() != null}" th:text="'Имя: ' + ${student.getSurname()}"></p>
-    <p th:if="${student.getName() != null}" th:text="'Имя: ' + ${student.getName()}"></p>
-    <p th:if="${student.getPatronymic() != null}" th:text="'Имя: ' + ${student.getPatronymic()}"></p>
-    <p th:if="${student.getGroup() != null}" th:text="'Имя: ' + ${student.getGroup()}"></p>
-  </div>
+  <h4 th:text="${student.getSurname()} + ' ' + ${student.getName()} + ' ' + ${student.getPatronymic()}"></h4>
+  <h4 th:with="group=${student.getGroup()}">
+    <span th:text="${group.getYear()}"> </span> курс,
+    <a th:href="'/stream?stream=' + ${group.getStream()}">
+      <span th:text="${group.getStream()}"> </span>
+    </a> поток,
+    <a th:href="'/group?id=' + ${group.getId()}">
+      <span th:text="${group.getNumber()}"> </span>
+    </a> группа
+  </h4>
 
   <!--edit delete order button group-->
   <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group mr-2" role="group" aria-label="First group">
-      <form style="margin-right: 30px" method="get" action="/editPerson">
-        <input type="hidden" name="studentId" th:value="${student.getId()}"/>
+      <form style="margin-right: 30px" method="get" action="/editStudent">
+        <input type="hidden" name="id" th:value="${student.getId()}"/>
         <button id="editButton" type="submit" class="btn btn-secondary">Редактировать информацию о человеке</button>
       </form>
-      <form method="post" action="/removePerson">
-        <input type="hidden" name="studentId" th:value="${student.getId()}"/>
+      <form method="post" action="/removeStudent">
+        <input type="hidden" name="id" th:value="${student.getId()}"/>
         <button id="deleteButton" type="submit" class="btn btn-secondary">Удалить человека из базы</button>
       </form>
     </div>
