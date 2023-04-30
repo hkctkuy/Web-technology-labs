@@ -8,4 +8,10 @@ import java.util.List;
 public interface CourseDAO extends TableDAO<Course, Long> {
 
     List<Lecturer> getLecturerList(Course course);
+
+    List<Course> getByYear(Integer year);
+
+    List<Course> getByYearWithoutSpec(Integer year);
+
+    List<Course> getSpec();
 }

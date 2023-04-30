@@ -36,4 +36,41 @@ public class CourseDAOImpl extends TableDAOImpl<Course, Long> implements CourseD
             return lecturerList;
         }
     }
+
+    @Override
+    public List<Course> getByYear(Integer year) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Course> query = session
+                    .createQuery("SELECT c FROM Course c " +
+                            "WHERE c.year = :year",
+                            Course.class)
+                    .setParameter("year", year);
+            return query.getResultList().size() == 0 ? null : query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Course> getByYearWithoutSpec(Integer year) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Course> query = session
+                    .createQuery("SELECT c FROM Course c " +
+                            "WHERE c.year = :year AND c.coverage != :coverage",
+                            Course.class)
+                    .setParameter("year", year)
+                    .setParameter("coverage", Course.Coverage.SPEC);
+            return query.getResultList().size() == 0 ? null : query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Course> getSpec() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Course> query = session
+                    .createQuery("SELECT c FROM Course c " +
+                            "WHERE c.coverage = :coverage",
+                            Course.class)
+                    .setParameter("coverage", Course.Coverage.SPEC);
+            return query.getResultList().size() == 0 ? null : query.getResultList();
+        }
+    }
 }

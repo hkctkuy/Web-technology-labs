@@ -1,7 +1,7 @@
 package labs.webtech.DAO;
 
-import labs.webtech.table.*;
-
+import labs.webtech.table.Course;
+import labs.webtech.table.Lecturer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource(locations="classpath:application.properties")
-public class LecturerDAOTest {
+public class CourseDAOTest {
 
     @Autowired
     private CourseDAO courseDAO;
@@ -26,57 +27,62 @@ public class LecturerDAOTest {
     private SessionFactory sessionFactory;
 
     @Test
-    void testIsAttached() {
-        Lecturer lecturer = lecturerDAO.getById(1L);
-        assertNotNull(lecturer);
+    void testGetLecturerList() {
         Course course = courseDAO.getById(1L);
         assertNotNull(course);
-        assertTrue(lecturerDAO.isAttached(lecturer, course));
+        List<Lecturer> lecturerList = courseDAO.getLecturerList(course);
+        assertNotNull(lecturerList);
+        assertEquals(lecturerList.size(), 2);
         course = courseDAO.getById(2L);
         assertNotNull(course);
-        assertFalse(lecturerDAO.isAttached(lecturer, course));
+        lecturerList = courseDAO.getLecturerList(course);
+        assertNotNull(lecturerList);
+        assertEquals(lecturerList.size(), 1);
     }
 
     @Test
-    void testGetCourseList() {
-        Lecturer lecturer = lecturerDAO.getById(1L);
-        assertNotNull(lecturer);
-        List<Course> courseList = lecturerDAO.getCourseList(lecturer);
+    void testGetByYear() {
+        List<Course> courseList = new ArrayList<>(courseDAO.getByYear(1));
         assertNotNull(courseList);
         assertEquals(courseList.size(), 1);
-        lecturer = lecturerDAO.getById(2L);
-        assertNotNull(lecturer);
-        courseList = lecturerDAO.getCourseList(lecturer);
+
+        courseList = new ArrayList<>(courseDAO.getByYear(2));
         assertNotNull(courseList);
         assertEquals(courseList.size(), 2);
+
+        courseList = courseDAO.getByYear(3);
+        assertNull(courseList);
     }
 
     @Test
-    void testIsFree() {
-        Lecturer lecturer = lecturerDAO.getById(1L);
-        assertNotNull(lecturer);
-        assertFalse(lecturerDAO.isFree(lecturer, 0));
-        assertTrue(lecturerDAO.isFree(lecturer, 1));
+    void testGetByYearWithoutSpec() {
+        List<Course> courseList = new ArrayList<>(courseDAO.getByYearWithoutSpec(1));
+        assertNotNull(courseList);
+        assertEquals(courseList.size(), 1);
+
+        courseList = new ArrayList<>(courseDAO.getByYearWithoutSpec(2));
+        assertNotNull(courseList);
+        assertEquals(courseList.size(), 1);
+
+        courseList = courseDAO.getByYear(3);
+        assertNull(courseList);
     }
 
     @Test
-    void testGetFreeTime() {
-        Lecturer lecturer = lecturerDAO.getById(1L);
-        assertNotNull(lecturer);
-        List<Integer> freeTime = lecturerDAO.getFreeTime(lecturer);
-        assertEquals(freeTime.size(), 29);
-        lecturer = lecturerDAO.getById(2L);
-        assertNotNull(lecturer);
-        freeTime = lecturerDAO.getFreeTime(lecturer);
-        assertEquals(freeTime.size(), 30);
+    void testGetSpec() {
+        List<Course> courseList = new ArrayList<>(courseDAO.getSpec());
+        assertNotNull(courseList);
+        assertEquals(courseList.size(), 1);
     }
 
     @BeforeEach
     void beforeEach() {
         Course linal = new Course("Линейная алгебра", Course.Coverage.STREAM, 2, 1);
         Course matan = new Course("Комплексный анализ", Course.Coverage.STREAM, 1, 2);
+        Course quanmech = new Course("Введение в квантовую механику", Course.Coverage.SPEC, 1, 2);
         courseDAO.save(linal);
         courseDAO.save(matan);
+        courseDAO.save(quanmech);
         Lecturer linaler = new Lecturer("Линейный", "Леонид", "Леонтьевич");
         Lecturer mataner = new Lecturer("Матанов", "Михаил", "Маркович");
         lecturerDAO.save(linaler);
@@ -84,16 +90,6 @@ public class LecturerDAOTest {
         lecturerDAO.attachLecturerCourse(linaler, linal);
         lecturerDAO.attachLecturerCourse(mataner, matan);
         lecturerDAO.attachLecturerCourse(mataner, linal);
-        // Create some exercise
-        Course course = new Course("", Course.Coverage.STREAM, 1, 1);
-        Exercise exercise = new Exercise(course);
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.saveOrUpdate(course);
-            session.saveOrUpdate(exercise);
-            session.getTransaction().commit();
-        }
-        lecturerDAO.bindToExercise(linaler, exercise, 0);
     }
 
     @BeforeAll
@@ -102,12 +98,9 @@ public class LecturerDAOTest {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.createSQLQuery("TRUNCATE \"Course\" RESTART IDENTITY CASCADE;").executeUpdate();
-            session.createSQLQuery("TRUNCATE \"Exercise\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"Lecturer\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("TRUNCATE \"LecturerDist\" RESTART IDENTITY CASCADE;").executeUpdate();
-            session.createSQLQuery("TRUNCATE \"LecturerSchedule\" RESTART IDENTITY CASCADE;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Course_course_id_seq\" RESTART WITH 1;").executeUpdate();
-            session.createSQLQuery("ALTER SEQUENCE \"Exercise_exercise_id_seq\" RESTART WITH 1;").executeUpdate();
             session.createSQLQuery("ALTER SEQUENCE \"Lecturer_lecturer_id_seq\" RESTART WITH 1;").executeUpdate();
             session.getTransaction().commit();
         }
