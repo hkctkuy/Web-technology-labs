@@ -30,15 +30,15 @@
   </h4>
 
   <!--edit delete order button group-->
-  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-    <div class="btn-group mr-2" role="group" aria-label="First group">
+  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button students">
+    <div class="btn-group mr-2" role="group" aria-label="First student">
       <form style="margin-right: 30px" method="get" action="/editStudent">
         <input type="hidden" name="id" th:value="${student.getId()}"/>
-        <button id="editButton" type="submit" class="btn btn-secondary">Редактировать информацию о человеке</button>
+        <button id="editButton" type="submit" class="btn btn-secondary">Редактировать информацию о студенте</button>
       </form>
       <form method="post" action="/removeStudent">
         <input type="hidden" name="id" th:value="${student.getId()}"/>
-        <button id="deleteButton" type="submit" class="btn btn-secondary">Удалить человека из базы</button>
+        <button id="deleteButton" type="submit" class="btn btn-secondary">Удалить студента</button>
       </form>
     </div>
   </div>

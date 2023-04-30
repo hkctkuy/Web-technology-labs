@@ -17,7 +17,7 @@ class HibernateDatabaseConfigTest {
     private LocalSessionFactoryBean sessionFactory;
 
     @Test
-    public void test() {
+    public void testSessionFactory() {
         SessionFactory sessionFactoryObject = sessionFactory.getObject();
         assertNotNull(sessionFactoryObject);
         Session session = sessionFactoryObject.openSession();

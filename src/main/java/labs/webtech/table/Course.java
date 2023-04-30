@@ -58,4 +58,16 @@ public class Course implements TableEntity<Long>{
                 && Objects.equals(depth, other.depth)
                 && Objects.equals(year, other.year);
     }
+
+    public boolean isCoverageStream() {
+        return coverage == Coverage.STREAM;
+    }
+
+    public boolean isCoverageGroup() {
+        return coverage == Coverage.GROUP;
+    }
+
+    public boolean isCoverageSpec() {
+        return coverage == Coverage.SPEC;
+    }
 }

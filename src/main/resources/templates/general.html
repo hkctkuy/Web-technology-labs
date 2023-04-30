@@ -27,6 +27,12 @@
                 <a class="nav-link" id="rootLink" th:href="@{index}">На главную</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" id="coursesLink" th:href="@{courses}">Учебный план</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lecturersLink" th:href="@{lecturers}">Преподователи</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" id="groupsLink" th:href="@{groups}">Учебные группы</a>
             </li>
         </ul>
@@ -35,12 +41,9 @@
 <!--end of page header-->
 
 
-<div th:fragment="site-footer" class="fixed-bottom indent">
+<div th:fragment="site-footer" class="btn btn-large indent">
     <p>
-        Учебное расписание
-        <br>
-        Егоров Илья, 2023
-        <br>
+        Учебное расписание, Егоров Илья, 2023
     </p>
 </div>
 

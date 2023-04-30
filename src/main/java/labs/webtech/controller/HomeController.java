@@ -11,6 +11,16 @@ public class HomeController {
         return "index";
     }
 
+    @RequestMapping(value = "/courses")
+    public String courses() {
+        return "courses";
+    }
+
+    @RequestMapping(value = "/lecturers")
+    public String lecturers() {
+        return "lecturers";
+    }
+
     @RequestMapping(value = "/groups")
     public String groups() {
         return "groups";
