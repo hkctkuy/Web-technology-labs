@@ -25,4 +25,8 @@ public class HomeController {
     public String groups() {
         return "groups";
     }
+    @RequestMapping(value = "/audiences")
+    public String audiences() {
+        return "audiences";
+    }
 }

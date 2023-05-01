@@ -6,11 +6,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-public class LecturerWebTest {
+public class AudienceWebTest {
 
     private ChromeDriver ChromeDriverRightVersion() {
         ChromeOptions options = new ChromeOptions();
@@ -26,46 +25,40 @@ public class LecturerWebTest {
     }
 
     @Test
-    void testLecturersPage() {
-        String link = "http://localhost:8080/lecturers";
+    void testAudiencesPage() {
+        String link = "http://localhost:8080/audiences";
         ChromeDriver driver = ChromeDriverRightVersion();
         driver.get(link);
-        assertEquals("Преподователи", driver.getTitle());
+        assertEquals("Аудитории", driver.getTitle());
 
-        WebElement button = driver.findElement(By.id("lecturerLink"));
-        button.click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-        assertEquals("Матанов Михаил Маркович", driver.getTitle());
+        List<WebElement> audiences = driver.findElement(By.id("audienceLink"))
+                .findElements(By.tagName("li"));
+        assertEquals(audiences.size(), 4);
+
+        String[] audienceList = {
+                "526",
+                "526-б",
+                "666",
+                "П1",
+        };
+
+        for (int i = 0; i < 4; i++) {
+            assertEquals(audiences
+                            .get(i).findElements(By.tagName("a"))
+                            .get(0).findElement(By.tagName("span"))
+                            .getText(),
+                    audienceList[i]);
+        }
 
         driver.quit();
     }
 
     @Test
-    void testLecturerPage() {
-        String link = "http://localhost:8080/lecturer?id=1";
+    void testAudiencePage() {
+        String link = "http://localhost:8080/audience?id=1";
         ChromeDriver driver = ChromeDriverRightVersion();
         driver.get(link);
-        assertEquals("Матанов Михаил Маркович", driver.getTitle());
-
-        List<WebElement> lecturers = driver.findElement(By.id("courseLink"))
-                .findElements(By.tagName("li"));
-        assertEquals(lecturers.size(), 5);
-
-        String[] courses = {
-                "Математический анализ I",
-                "Математический анализ II",
-                "Комплексный анализ",
-                "Функциональный анализ",
-                "Линейная алгебра"
-        };
-
-        for (int i = 0; i < 5; i++) {
-            assertEquals(lecturers
-                            .get(i).findElements(By.tagName("a"))
-                            .get(0).findElement(By.tagName("span"))
-                            .getText(),
-                    courses[i]);
-        }
+        assertEquals("Аудитория 526", driver.getTitle());
 
         driver.quit();
     }

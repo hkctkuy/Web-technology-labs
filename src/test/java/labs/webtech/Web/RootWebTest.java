@@ -45,20 +45,22 @@ public class RootWebTest {
         button = driver.findElement(By.id("coursesLink"));
         button.click();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-        String coursesTitle = "Учебный план";
-        assertEquals(coursesTitle, driver.getTitle());
+        assertEquals("Учебный план", driver.getTitle());
 
         button = driver.findElement(By.id("lecturersLink"));
         button.click();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-        String lecturersTitle = "Преподователи";
-        assertEquals(lecturersTitle, driver.getTitle());
+        assertEquals("Преподователи", driver.getTitle());
 
         button = driver.findElement(By.id("groupsLink"));
         button.click();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
-        String groupsTitle = "Учебные группы";
-        assertEquals(groupsTitle, driver.getTitle());
+        assertEquals("Учебные группы", driver.getTitle());
+
+        button = driver.findElement(By.id("audiencesLink"));
+        button.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        assertEquals("Аудитории", driver.getTitle());
 
         driver.quit();
     }

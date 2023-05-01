@@ -53,7 +53,6 @@ public class CourseWebTest {
         driver.get(link);
         assertEquals("Линейная алгебра", driver.getTitle());
 
-        driver.get(link);
         List<WebElement> lecturers = driver.findElement(By.id("lecturerLink"))
                 .findElements(By.tagName("li"));
         assertEquals(lecturers.size(), 2);
