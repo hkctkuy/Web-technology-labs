@@ -35,6 +35,36 @@ public class ExerciseDAOTest {
     private SessionFactory sessionFactory;
 
     @Test
+    void testGetExercise() {
+        Group group = groupDAO.getById(1L);
+        assertNotNull(group);
+
+        Exercise exercise = exerciseDAO.getExercise(group, 0);
+        assertNotNull(exercise);
+        assertEquals(exercise.getCourse().getName(), "Комплексный анализ");
+    }
+
+    @Test
+    void testGetAudience() {
+        Exercise exercise = exerciseDAO.getById(1L);
+        assertNotNull(exercise);
+
+        Audience audience = exerciseDAO.getAudience(exercise);
+        assertNotNull(audience);
+        assertEquals(audience.getNumber(), "111");
+    }
+
+    @Test
+    void testGetLecturer() {
+        Exercise exercise = exerciseDAO.getById(1L);
+        assertNotNull(exercise);
+
+        Lecturer lecturer = exerciseDAO.getLecturer(exercise);
+        assertNotNull(lecturer);
+        assertEquals(lecturer.getSurname(), "Матанов");
+    }
+
+    @Test
     void testAddExercise() {
         // Check audiences
         Audience audience = audienceDAO.getById(1L);

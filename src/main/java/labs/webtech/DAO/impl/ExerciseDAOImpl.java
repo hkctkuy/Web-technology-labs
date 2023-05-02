@@ -5,12 +5,10 @@ import labs.webtech.DAO.CourseDAO;
 import labs.webtech.DAO.ExerciseDAO;
 import labs.webtech.DAO.GroupDAO;
 import labs.webtech.DAO.LecturerDAO;
-import labs.webtech.table.Audience;
-import labs.webtech.table.Course;
-import labs.webtech.table.Exercise;
-import labs.webtech.table.Group;
-import labs.webtech.table.Lecturer;
+import labs.webtech.table.*;
 import lombok.SneakyThrows;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +30,55 @@ public class ExerciseDAOImpl extends TableDAOImpl<Exercise, Long> implements Exe
     private GroupDAO groupDAO = new GroupDAOImpl();
     @Autowired
     private LecturerDAO lecturerDAO = new LecturerDAOImpl();
+
+    @Override
+    public Exercise getExercise(Group group, Integer time) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<GroupSchedule> query = session
+                    .createQuery("SELECT gs FROM GroupSchedule gs " +
+                            "WHERE gs.group = :group AND gs.time = :time",
+                            GroupSchedule.class)
+                    .setParameter("group", group)
+                    .setParameter("time", time);
+            List<GroupSchedule> GroupScheduleList = query.getResultList();
+            if (GroupScheduleList.size() == 0) {
+                return null;
+            }
+            return GroupScheduleList.get(0).getExercise();
+        }
+    }
+
+    @Override
+    public Audience getAudience(Exercise exercise) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<AudienceSchedule> query = session
+                    .createQuery("SELECT asch FROM AudienceSchedule asch " +
+                                    "WHERE asch.exercise = :exercise",
+                            AudienceSchedule.class)
+                    .setParameter("exercise", exercise);
+            List<AudienceSchedule> AudienceScheduleList = query.getResultList();
+            if (AudienceScheduleList.size() == 0) {
+                return null;
+            }
+            return AudienceScheduleList.get(0).getAudience();
+        }
+    }
+
+    @Override
+    public Lecturer getLecturer(Exercise exercise) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<LecturerSchedule> query = session
+                    .createQuery("SELECT ls FROM LecturerSchedule ls " +
+                                    "WHERE ls.exercise = :exercise",
+                            LecturerSchedule.class)
+                    .setParameter("exercise", exercise);
+            List<LecturerSchedule> LecturerScheduleList = query.getResultList();
+            if (LecturerScheduleList.size() == 0) {
+                return null;
+            }
+            return LecturerScheduleList.get(0).getLecturer();
+        }
+    }
 
     @SneakyThrows
     @Override
