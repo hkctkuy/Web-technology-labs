@@ -6,10 +6,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-public class AudienceWebTest {
+public class ExerciseWebTest {
 
     private ChromeDriver ChromeDriverRightVersion() {
         ChromeOptions options = new ChromeOptions();
@@ -25,40 +26,27 @@ public class AudienceWebTest {
     }
 
     @Test
-    void testAudiencesPage() {
-        String link = "http://localhost:8080/audiences";
+    void testExercisesPage() {
+        String link = "http://localhost:8080/exercises";
         ChromeDriver driver = ChromeDriverRightVersion();
         driver.get(link);
-        assertEquals("Аудитории", driver.getTitle());
+        assertEquals("Расписание", driver.getTitle());
 
-        List<WebElement> audiences = driver.findElement(By.id("audienceLink"))
-                .findElements(By.tagName("li"));
-        assertEquals(audiences.size(), 5);
+        WebElement button = driver.findElement(By.id("courseLink"));
+        button.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        assertEquals("Линейная алгебра", driver.getTitle());
 
-        String[] audienceList = {
-                "П1",
-                "П2",
-                "526",
-                "526-б",
-                "666",
-        };
-
-        for (int i = 0; i < 4; i++) {
-            assertEquals(audiences
-                            .get(i).findElements(By.tagName("a"))
-                            .get(0).findElement(By.tagName("span"))
-                            .getText(),
-                    audienceList[i]);
-        }
-
-        driver.quit();
-    }
-
-    @Test
-    void testAudiencePage() {
-        String link = "http://localhost:8080/audience?id=1";
-        ChromeDriver driver = ChromeDriverRightVersion();
         driver.get(link);
+        button = driver.findElement(By.id("lecturerLink"));
+        button.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        assertEquals("Матанов Михаил Маркович", driver.getTitle());
+
+        driver.get(link);
+        button = driver.findElement(By.id("audienceLink"));
+        button.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         assertEquals("Аудитория П1", driver.getTitle());
 
         driver.quit();

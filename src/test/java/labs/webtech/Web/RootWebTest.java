@@ -62,6 +62,11 @@ public class RootWebTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         assertEquals("Аудитории", driver.getTitle());
 
+        button = driver.findElement(By.id("exercisesLink"));
+        button.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        assertEquals("Расписание", driver.getTitle());
+
         driver.quit();
     }
 

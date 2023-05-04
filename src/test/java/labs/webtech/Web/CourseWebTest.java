@@ -61,12 +61,12 @@ public class CourseWebTest {
                         .get(0).findElements(By.tagName("a"))
                         .get(0).findElement(By.tagName("span"))
                         .getText(),
-                "Линейный Леонид Леонтьевич");
+                "Матанов Михаил Маркович");
         assertEquals(lecturers
                         .get(1).findElements(By.tagName("a"))
                         .get(0).findElement(By.tagName("span"))
                         .getText(),
-                "Матанов Михаил Маркович");
+                "Линейный Леонид Леонтьевич");
 
         driver.quit();
     }

@@ -29,4 +29,9 @@ public class HomeController {
     public String audiences() {
         return "audiences";
     }
+
+    @RequestMapping(value = "/exercises")
+    public String exercises() {
+        return "exercises";
+    }
 }

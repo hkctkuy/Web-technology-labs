@@ -27,10 +27,11 @@ INSERT INTO "Lecturer" (surname, name, patronymic) VALUES
 	('Компилов', 'Константин', 'Кристианович');
 
 INSERT INTO "Audience" (number, capacity) VALUES
-	('526', DEFAULT),
-	('526-б', DEFAULT),
-	('666', DEFAULT),
-	('П1', 200);
+	('П1', 200),
+	('П2', 200),
+    ('526', DEFAULT),
+    ('526-б', DEFAULT),
+    ('666', DEFAULT);
 
 INSERT INTO "Course" (name, coverage, depth, year) VALUES
 	('Линейная алгебра', 0, 2, 1),
@@ -48,5 +49,50 @@ INSERT INTO "LecturerDist" (lecturer_id, course_id) VALUES
 	(1, 4),
 	(1, 5),
 	(2, 1),
+    (2, 2),
 	(3, 6),
 	(4, 7);
+
+INSERT INTO "Exercise" (exercise_id, course_id) VALUES
+    (1, 1),
+    (2, 1),
+    (3, 1),
+    (4, 1),
+    (5, 2),
+    (6, 2),
+    (7, 2),
+    (8, 2);
+
+INSERT INTO "GroupSchedule" (group_id, exercise_id, time) VALUES
+    (1, 1, 0),
+    (6, 1, 0),
+    (1, 2, 1),
+    (6, 2, 1),
+    (5, 3, 0),
+    (5, 4, 1),
+    (1, 5, 2),
+    (6, 5, 2),
+    (1, 6, 3),
+    (6, 6, 3),
+    (5, 7, 2),
+    (5, 8, 3);
+
+INSERT INTO "LecturerSchedule" (lecturer_id, exercise_id, time) VALUES
+    (1, 1, 0),
+    (1, 2, 1),
+    (2, 3, 0),
+    (2, 4, 1),
+    (1, 7, 2),
+    (1, 8, 3),
+    (2, 5, 2),
+    (2, 6, 3);
+
+INSERT INTO "AudienceSchedule" (audience_id, exercise_id, time) VALUES
+    (1, 1, 0),
+    (1, 2, 1),
+    (2, 3, 0),
+    (2, 4, 1),
+    (1, 7, 2),
+    (1, 8, 3),
+    (2, 5, 2),
+    (2, 6, 3);
